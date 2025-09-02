@@ -1,57 +1,48 @@
 import React, { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
-import { successToast, warningToast, errorToast } from "../utils/DisplayToast";
+import { successToast, errorToast } from "../../utils/DisplayToast";
+import apiClient from "../../lib/axios";
+import { apiLoginUrl, apiToken } from "../../lib/Constants";
 
-const Login = () => {
+const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
-  const apiLoginUrl = import.meta.env.VITE_API_LOGIN_URL;
-  const apiKey = import.meta.env.VITE_API_KEY;
-  const apiToken = import.meta.env.VITE_API_ACCESS_TOKEN;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!email || !password) {
-      setError("Please enter both email and password.");
+      errorToast("Please enter both email and password.");
       return;
     }
-
     try {
       setError("");
-      const response = await fetch(apiLoginUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
-      if (response.ok) {
-        const data = await response.json();
-        successToast("Login successful!");
-        setEmail("");
-        setPassword("");
-        console.log("Login successful:", data);
-        localStorage.setItem('accessToken', apiToken);
-      } else {
-        const errorData = await response.json();
-        console.error(
-          "Login failed. Please check your credentials.",
-          errorData.message
-        );
-        return;
-      }
+      const response = await apiClient.post(apiLoginUrl, { email, password });
+      const data = response.data;
+      successToast("Login successful!");
+      setEmail("");
+      setPassword("");
+      localStorage.setItem("Token", apiToken);
     } catch (error) {
-      setError("An error occurred. Please try again.");
-      console.error("Network error:", error);
-      return;
+      console.error("Login failed:", error);
     }
   };
 
   const handleForgetPassword = () => {
     alert("Forgot password functionality not implemented yet.");
+  };
+  const handleFieldChange = (e, field) => {
+    switch (field) {
+      case "email":
+        setEmail(e.target.value);
+        break;
+      case "password":
+        setPassword(e.target.value);
+        break;
+      default:
+        break;
+    }
   };
 
   return (
@@ -70,10 +61,7 @@ const Login = () => {
           name="email"
           placeholder="Email"
           value={email}
-          onChange={(e) => {
-            setEmail(e.target.value);
-            setError("");
-          }}
+          onChange={(e) => handleFieldChange(e, "email")}
           className="mb-3 px-3 py-2 rounded bg-neutral-700 border border-neutral-600 text-white focus:outline-none focus:ring-2 focus:ring-red-600 w-full"
         />
 
@@ -84,10 +72,7 @@ const Login = () => {
             name="password"
             placeholder="Password"
             value={password}
-            onChange={(e) => {
-              setPassword(e.target.value);
-              setError("");
-            }}
+            onChange={(e) => handleFieldChange(e, "password")}
             className="px-3 py-2 rounded bg-neutral-700 border border-neutral-600 text-white focus:outline-none focus:ring-2 focus:ring-red-600 w-full pr-10"
           />
           <button
@@ -119,4 +104,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default LoginPage;
