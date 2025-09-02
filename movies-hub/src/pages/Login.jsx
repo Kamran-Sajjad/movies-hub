@@ -1,11 +1,15 @@
 import React, { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
+import { successToast, warningToast, errorToast } from "../utils/DisplayToast";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
+  const apiLoginUrl = import.meta.env.VITE_API_LOGIN_URL;
+  const apiKey = import.meta.env.VITE_API_KEY;
+  const apiToken = import.meta.env.VITE_API_ACCESS_TOKEN;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -17,22 +21,20 @@ const Login = () => {
 
     try {
       setError("");
-      const response = await fetch(
-        "https://api-stage.spexbot.com/users/login/",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email, password }),
-        }
-      );
+      const response = await fetch(apiLoginUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
       if (response.ok) {
         const data = await response.json();
-        alert("Logged in!");
+        successToast("Login successful!");
         setEmail("");
         setPassword("");
         console.log("Login successful:", data);
+        localStorage.setItem('accessToken', apiToken);
       } else {
         const errorData = await response.json();
         console.error(
