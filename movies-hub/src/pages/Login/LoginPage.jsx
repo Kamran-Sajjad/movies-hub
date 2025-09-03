@@ -3,8 +3,10 @@ import { Eye, EyeOff } from "lucide-react";
 import { successToast, errorToast } from "../../utils/DisplayToast";
 import apiClient from "../../lib/axios";
 import { apiLoginUrl, apiToken } from "../../lib/Constants";
+import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -17,13 +19,13 @@ const LoginPage = () => {
       return;
     }
     try {
-      setError("");
       const response = await apiClient.post(apiLoginUrl, { email, password });
       const data = response.data;
       successToast("Login successful!");
       setEmail("");
       setPassword("");
       localStorage.setItem("Token", apiToken);
+      navigate("/home");
     } catch (error) {
       console.error("Login failed:", error);
     }
