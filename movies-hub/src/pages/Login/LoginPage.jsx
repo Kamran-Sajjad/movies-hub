@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
-import { successToast, errorToast } from "../../utils/DisplayToast";
-import apiClient from "../../lib/axios";
-import { apiLoginUrl, apiToken } from "../../lib/Constants";
+import { successToast, errorToast } from "../../utils/displayToast";
+import { API_TOKEN } from "../../utils/constants";
 import { useNavigate } from "react-router-dom";
+import { loginUserApi } from "../../lib/api";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -19,12 +19,13 @@ const LoginPage = () => {
       return;
     }
     try {
-      const response = await apiClient.post(apiLoginUrl, { email, password });
+      const payload = { email, password };
+      const response = await loginUserApi(payload);
       const data = response.data;
       successToast("Login successful!");
       setEmail("");
       setPassword("");
-      localStorage.setItem("Token", apiToken);
+      localStorage.setItem("token", API_TOKEN);
       navigate("/home");
     } catch (error) {
       console.error("Login failed:", error);
@@ -34,18 +35,9 @@ const LoginPage = () => {
   const handleForgetPassword = () => {
     alert("Forgot password functionality not implemented yet.");
   };
-  const handleFieldChange = (e, field) => {
-    switch (field) {
-      case "email":
-        setEmail(e.target.value);
-        break;
-      case "password":
-        setPassword(e.target.value);
-        break;
-      default:
-        break;
-    }
-  };
+  const handleEmailChange = (e) =>  setEmail(e.target.value);
+  const handlePasswordChange = (e) =>  setPassword(e.target.value);
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-neutral-700 px-4">
@@ -63,7 +55,7 @@ const LoginPage = () => {
           name="email"
           placeholder="Email"
           value={email}
-          onChange={(e) => handleFieldChange(e, "email")}
+          onChange={handleEmailChange}
           className="mb-3 px-3 py-2 rounded bg-neutral-700 border border-neutral-600 text-white focus:outline-none focus:ring-2 focus:ring-red-600 w-full"
         />
 
@@ -74,7 +66,7 @@ const LoginPage = () => {
             name="password"
             placeholder="Password"
             value={password}
-            onChange={(e) => handleFieldChange(e, "password")}
+            onChange={handlePasswordChange}
             className="px-3 py-2 rounded bg-neutral-700 border border-neutral-600 text-white focus:outline-none focus:ring-2 focus:ring-red-600 w-full pr-10"
           />
           <button

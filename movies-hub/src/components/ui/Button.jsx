@@ -1,27 +1,42 @@
-// Reusable button component
-export const NavButton = ({ label, onClick }) => (
-  <button
-    onClick={onClick}
-    className="bg-gray-700 hover:bg-yellow-400 hover:text-black text-white rounded-xl px-3 py-1 
-    cursor-pointer text-base transition-colors duration-200"
-  >
-    {label}
-  </button>
-);
-const colorMap = {
-  yellow: "hover:bg-yellow-400 hover:text-black",
-  red: "hover:bg-red-500 hover:text-white",
+
+import React from "react";
+
+const baseStyles =
+  "rounded-xl px-4 py-2 font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2";
+
+const variants = {
+  primary:
+    "bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500",
+  secondary:
+    "bg-gray-700 text-white hover:bg-gray-500 focus:ring-gray-500",
+  success:
+    "bg-green-600 text-white hover:bg-green-700 focus:ring-green-500",
+  danger:
+    "bg-red-500 text-white hover:bg-red-700 focus:ring-red-500",
+  warning:
+    "bg-yellow-400 text-black hover:bg-yellow-500 focus:ring-yellow-400",
+  outline:
+    "text-gray-700 bg-gray-100 hover:bg-gray-700 hover:text-white focus:ring-gray-100",
+    // "border border-gray-400 text-gray-700 hover:bg-gray-100 focus:ring-gray-400",
+  ghost:
+    "text-black hover:bg-gray-200 focus:ring-gray-300",
+    invisible:
+    "",
 };
 
-export const NavProfileButton = ({ label, onClick, bgColor }) => {
-  const colorClass = colorMap[bgColor];
 
+export const Button = ({ label, variant = "secondary",onClick, className = "" }) => {
   return (
     <button
       onClick={onClick}
-      className={`block w-full text-left px-4 py-2 text-sm text-white rounded-md transition-colors ${colorClass}`}
+      className={`${baseStyles} ${variants[variant]} ${className}`}
     >
       {label}
     </button>
   );
 };
+
+
+
+
+

@@ -1,10 +1,19 @@
-import apiClient from "./apiClient";
+import axios from "axios";
 
-import { successToast, errorToast } from "../utils/DisplayToast";
+import { successToast, errorToast } from "../utils/displayToast";
+
+import { API_BASE_URL } from "../utils/constants";
+
+const apiClient = axios.create({
+  baseURL: API_BASE_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
 
 apiClient.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("Token");
+    const token = localStorage.getItem("token");
     if (token) {
       config.headers["Authorization"] = `Bearer ${token}`;
     }
