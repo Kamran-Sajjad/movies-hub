@@ -1,3 +1,4 @@
+import Footer from "../../components/layout/Footer";
 import Navbar from "../../components/layout/Navbar";
 import MovieSection from "../movie/MovieSection";
 
@@ -6,10 +7,10 @@ const HomePage = () => {
     <>
       <div>
         <Navbar />
-      </div>
-      <div>
         <MovieSection />
+        <Footer />
       </div>
+      
     </>
   );
 };

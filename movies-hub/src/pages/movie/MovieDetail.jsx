@@ -37,7 +37,6 @@ const MovieDetail = () => {
     <>
       <div className="relative z-20 w-full min-h-screen overscroll-none overflow-hidden">
         <Navbar />
-
         <section className="absolute min-w-full">
           <div
             className="absolute inset-0 bg-cover bg-center"

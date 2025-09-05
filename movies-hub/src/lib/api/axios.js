@@ -1,8 +1,8 @@
 import axios from "axios";
 
-import { successToast, errorToast } from "../utils/displayToast";
+import { successToast, errorToast } from "../../utils/displayToast";
 
-import { API_BASE_URL } from "../utils/constants";
+import { API_BASE_URL } from "../constant/constants";
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,

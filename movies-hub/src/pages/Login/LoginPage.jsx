@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { successToast, errorToast } from "../../utils/displayToast";
-import { API_TOKEN } from "../../utils/constants";
+import { API_TOKEN } from "../../lib/constant/constants";
 import { useNavigate } from "react-router-dom";
 import { loginUserApi } from "../../lib/api";
 

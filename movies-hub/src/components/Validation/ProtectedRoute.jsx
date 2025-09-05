@@ -1,6 +1,7 @@
 import { Navigate } from "react-router-dom";
+import { ROUTES } from "../../routes/routeConstants";
 
-export const ProtectedRoute = ({ element }) => {
+export const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem("token");
-  return token ? element : <Navigate to="/login" />;
+  return token ? children : <Navigate to={ROUTES.LOGIN} />;
 };

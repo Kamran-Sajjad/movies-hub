@@ -4,6 +4,7 @@ import { getMoviesApi } from "../../lib/api";
 import MovieCard from "./MovieCard";
 import MovieDetail from "./MovieDetail";
 import { useNavigate } from "react-router-dom";
+import { ROUTES } from "../../routes/routeConstants";
 const MoviesSection = () => {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -13,7 +14,7 @@ const MoviesSection = () => {
     const loadMovies = async () => {
       setLoading(true);
       try {
-        const response = await getMoviesApi(50);
+        const response = await getMoviesApi(27);
         setMovies(response.data.results || []);
       } catch (error) {
         console.error("Error fetching movies:", error);
@@ -24,7 +25,8 @@ const MoviesSection = () => {
 
     loadMovies();
   }, []);
-  const handleMovieCardClick = (movie) => navigate(`/movie/${movie.id}`);
+
+  const handleMovieCardClick = (movie) => navigate(ROUTES.MOVIE_ID.replace(":id",movie.id));
 
   return (
     <section className="px-8 py-6">
