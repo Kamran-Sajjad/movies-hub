@@ -5,6 +5,7 @@ import MovieCard from "./MovieCard";
 import MovieDetail from "./MovieDetail";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../routes/routeConstants";
+import Wrapper from "../../components/layout/Wrapper";
 const MoviesSection = () => {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -26,9 +27,12 @@ const MoviesSection = () => {
     loadMovies();
   }, []);
 
-  const handleMovieCardClick = (movie) => navigate(ROUTES.MOVIE_ID.replace(":id",movie.id));
+  const handleMovieCardClick = (movie) =>
+    navigate(ROUTES.MOVIE_ID.replace(":id", movie.id));
 
   return (
+    <Wrapper >
+      
     <section className="px-8 py-6">
       <h2 className="text-3xl font-bold text-black mb-6">Trending Movies</h2>
 
@@ -50,6 +54,7 @@ const MoviesSection = () => {
         </div>
       )}
     </section>
+    </Wrapper>
   );
 };
 

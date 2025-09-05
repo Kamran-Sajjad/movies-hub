@@ -3,18 +3,19 @@
 import React, { useState } from "react";
 import { Button } from "../ui/Button";
 import { useNavigate } from "react-router-dom";
+import { ROUTES } from "../../routes/routeConstants";
 
 const Navbar = () => {
   const [search, setSearch] = useState("");
   const [showMenu, setShowMenu] = useState(false);
   const navigate = useNavigate();
 
-  const handleHomeButtonClick = () => navigate("/home");
-  const handleFavoritesButtonClick = () => navigate("/favorites");
+  const handleHomeButtonClick = () => navigate(ROUTES.HOME);
+  const handleFavoritesButtonClick = () => navigate(ROUTES.FAVORITE);
   const handleProfileButtonClick = () => navigate("/profile");
   const handleLogoutButtonClick = () => {
     localStorage.removeItem("token");
-    navigate("/login");
+    navigate(ROUTES.LOGIN);
   };
 
   const handleSearchFieldChange = (e) => setSearch(e.target.value);
