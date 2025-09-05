@@ -6,7 +6,7 @@ import { Button } from "../../components/ui/Button";
 
 const MovieDetail = () => {
   const { id } = useParams();
-  const [movie, setMovie] = useState(null);
+  const [movieDetail, setMovieDetail] = useState(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -14,7 +14,7 @@ const MovieDetail = () => {
       setLoading(true);
       try {
         const response = await getMovieByIdApi(id);
-        setMovie(response.data);
+        setMovieDetail(response.data);
       } catch (error) {
         console.error("Error fetching movie details:", error);
       } finally {
@@ -29,7 +29,7 @@ const MovieDetail = () => {
     return <p className="text-gray-400 p-6">Loading movie details...</p>;
   }
 
-  if (!movie) {
+  if (!movieDetail) {
     return <p className="text-gray-400 p-6">Movie not found.</p>;
   }
 
@@ -41,7 +41,7 @@ const MovieDetail = () => {
           <div
             className="absolute inset-0 bg-cover bg-center"
             style={{
-              backgroundImage: `url(https://image.tmdb.org/t/p/original${movie.backdrop_path})`,
+              backgroundImage: `url(https://image.tmdb.org/t/p/original${movieDetail.backdrop_path})`,
             }}
           ></div>
 
@@ -49,31 +49,31 @@ const MovieDetail = () => {
 
           <div className="relative z-10 max-w-6xl mx-auto px-6 py-20 flex flex-col md:flex-row items-center gap-10">
             <img
-              src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-              alt={movie.title}
+              src={`https://image.tmdb.org/t/p/w500${movieDetail.poster_path}`}
+              alt={movieDetail.title}
               className="w-64 rounded-xl shadow-lg"
             />
 
             <div className="text-white flex-1">
-              <h1 className="text-4xl font-bold">{movie.title}</h1>
+              <h1 className="text-4xl font-bold">{movieDetail.title}</h1>
               <p className="text-gray-300 mt-2 italic">
-                Original Title: {movie.original_title}
+                Original Title: {movieDetail.original_title}
               </p>
               <p className="text-gray-400 mt-1">
-                Release Date: {movie.release_date}
+                Release Date: {movieDetail.release_date}
               </p>
               <p className="text-gray-400 mt-1">
-                Language: {movie.original_language?.toUpperCase()}
+                Language: {movieDetail.original_language?.toUpperCase()}
               </p>
               <p className="text-yellow-400 mt-2 text-lg">
-                ⭐ {movie.vote_average?.toFixed(1)} ({movie.vote_count} votes)
+                ⭐ {movieDetail.vote_average?.toFixed(1)} ({movieDetail.vote_count} votes)
               </p>
 
               <p className="text-gray-200 mt-6 leading-relaxed">
-                {movie.overview}
+                {movieDetail.overview}
               </p>
               <p className="text-gray-400 mt-4">
-                Popularity Score: {movie.popularity}
+                Popularity Score: {movieDetail.popularity}
               </p>
 
               <div className="mt-6 flex gap-4">
