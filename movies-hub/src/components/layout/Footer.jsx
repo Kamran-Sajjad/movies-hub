@@ -2,53 +2,46 @@ import { Facebook, Instagram, Twitter, Youtube } from "lucide-react";
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-900 text-gray-300 py-8 mt-10">
-      <div className="container mx-auto px-6 md:px-12">
-        {/* Top Section */}
-        <div className="flex flex-col md:flex-row items-center justify-between border-b border-gray-700 pb-6">
-          {/* Brand */}
-          <h1 className="text-2xl font-bold text-yellow-400 mb-4 md:mb-0">
+    <footer className="bg-gray-900 text-gray-300 border-gray-800">
+      <div className="max-w-7xl mx-auto px-6 md:px-12 py-4">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+          <h2 className="text-xl font-bold text-yellow-400 tracking-wide">
             MoviesHub
-          </h1>
+          </h2>
 
-          {/* Navigation Links */}
-          {/* <ul className="flex flex-wrap items-center gap-6 text-sm">
-            <li className="hover:text-yellow-400 cursor-pointer">Home</li>
-            <li className="hover:text-yellow-400 cursor-pointer">Favorites</li>
-          </ul> */}
-        </div>
-
-        {/* Bottom Section */}
-        <div className="flex flex-col md:flex-row items-center justify-between mt-6">
-          {/* Social Links */}
-          <div className="flex gap-5 text-xl mb-4 md:mb-0">
+          <div className="flex gap-6 text-xl">
             <a
               href="#"
               className="hover:text-yellow-400 transition-colors duration-200"
+              aria-label="Facebook"
             >
               <Facebook size={22} />
             </a>
             <a
               href="#"
               className="hover:text-yellow-400 transition-colors duration-200"
+              aria-label="Instagram"
             >
               <Instagram size={22} />
             </a>
             <a
               href="#"
               className="hover:text-yellow-400 transition-colors duration-200"
+              aria-label="Twitter"
             >
               <Twitter size={22} />
             </a>
             <a
               href="#"
               className="hover:text-yellow-400 transition-colors duration-200"
+              aria-label="Youtube"
             >
               <Youtube size={22} />
             </a>
           </div>
+        </div>
 
-          {/* Copyright */}
+        <div className="border-t border-gray-800 mt-4 pt-4 text-center">
           <p className="text-sm text-gray-500">
             © {new Date().getFullYear()} MoviesHub. All rights reserved.
           </p>
