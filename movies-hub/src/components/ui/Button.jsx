@@ -21,10 +21,11 @@ export const Button = ({
   variant = "secondary",
   onClick,
   className = "",
+  disabled = false,
 }) => {
   return (
     <button
-      onClick={onClick}
+      onClick={disabled ? undefined : onClick}
       className={`${baseStyles} ${variants[variant]} ${className}`}
     >
       {label}
