@@ -66,7 +66,7 @@ const MoviesSection = () => {
             variant={page === 1 ? "disabled" : "warning"}
           />
           <span className="text-lg font-bold text-black">Page {page}</span>
-          
+
           <Button
             label={"Next"}
             disabled={page === 500}
