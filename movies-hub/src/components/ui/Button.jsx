@@ -17,9 +17,10 @@ const variants = {
     "bg-yellow-400 text-black hover:bg-yellow-500 focus:ring-yellow-400",
   outline:
     "text-gray-700 bg-gray-100 hover:bg-gray-700 hover:text-white focus:ring-gray-100",
-    // "border border-gray-400 text-gray-700 hover:bg-gray-100 focus:ring-gray-400",
   ghost:
     "text-black hover:bg-gray-200 focus:ring-gray-300",
+    disabled:
+    "bg-gray-600 text-gray-300 cursor-not-allowed",
     invisible:
     "",
 };

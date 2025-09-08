@@ -22,7 +22,7 @@ const Navbar = () => {
   const handleImageClick = () => setShowMenu((prev) => !prev);
 
   return (
-    <nav className="flex items-center justify-between px-6 h-16 bg-gray-900 text-white shadow-md relative">
+    <nav className="flex items-center z-30 justify-between px-6 h-16 bg-gray-900 text-white shadow-md relative">
       <div
         onClick={handleHomeButtonClick}
         className="font-bold text-2xl tracking-wide cursor-pointer hover:text-yellow-400 transition-colors"
