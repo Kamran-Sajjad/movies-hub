@@ -37,18 +37,27 @@ const useMovieStore = create((set, get) => ({
     }
   },
 
+
   nextPage: async () => {
-    const { query, page } = get();
+    const { query, page, searchMovies, fetchMovies } = get();
     const newPage = page + 1;
-    set({ page: newPage });
-    query ? get().MOVIES_API.searchMovies(query, newPage) : get().fetchMovies();
+    if (query) {
+      await searchMovies(query, newPage);
+    } else {
+      set({ page: newPage });
+      await fetchMovies();
+    }
   },
 
   prevPage: async () => {
-    const { query, page } = get();
+    const { query, page, searchMovies, fetchMovies } = get();
     const newPage = Math.max(1, page - 1);
-    set({ page: newPage });
-    query ? get().MOVIES_API.searchMovies(query, newPage) : get().fetchMovies();
+    if (query) {
+      await searchMovies(query, newPage);
+    } else {
+      set({ page: newPage });
+      await fetchMovies();
+    }
   },
 }));
 

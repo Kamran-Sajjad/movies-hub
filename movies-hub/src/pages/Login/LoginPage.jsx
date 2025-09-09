@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { successToast, errorToast } from "../../utils/displayToast";
-import { API_TOKEN } from "../../lib/constant/constants";
 import { useNavigate } from "react-router-dom";
 import { LOGIN_USER_API } from "../../lib/api";
 import { ROUTES } from "../../routes/routeConstants";
 import { Button } from "../../components/ui/Button";
+import { useAuthStore } from "../../lib/store/useAuthStore";
+import { API_TOKEN } from "../../lib/constant/constants";
 
 const LoginPage = () => {
   const navigate = useNavigate();
+  const setToken = useAuthStore((state) => state.setToken);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -17,34 +20,25 @@ const LoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     setErrors({ email: "", password: "" });
 
-    let hasError = false;
-    if (!email) {
-      setErrors((prev) => ({ ...prev, email: "Please enter your email." }));
-      hasError = true;
+    if (!email || !password) {
+      setErrors({
+        email: !email ? "Please enter your email." : "",
+        password: !password ? "Please enter your password." : "",
+      });
+      return;
     }
-    if (!password) {
-      setErrors((prev) => ({
-        ...prev,
-        password: "Please enter your password.",
-      }));
-      hasError = true;
-    }
-
-    if (hasError) return;
 
     try {
       setLoading(true);
       const payload = { email, password };
       const response = await LOGIN_USER_API.login(payload);
-      const data = response.data;
 
       successToast("Login successful!");
       setEmail("");
       setPassword("");
-      localStorage.setItem("token", API_TOKEN);
+      setToken(API_TOKEN);
       navigate(ROUTES.MOVIES);
     } catch (error) {
       console.error("Login failed:", error);
@@ -52,10 +46,6 @@ const LoginPage = () => {
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleForgetPassword = () => {
-    alert("Forgot password functionality not implemented yet.");
   };
 
   return (
@@ -68,9 +58,7 @@ const LoginPage = () => {
 
         <div className="mb-3">
           <input
-            id="email"
             type="email"
-            name="email"
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -83,9 +71,7 @@ const LoginPage = () => {
 
         <div className="relative mb-3">
           <input
-            id="password"
             type={showPassword ? "text" : "password"}
-            name="password"
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -95,7 +81,6 @@ const LoginPage = () => {
             type="button"
             onClick={() => setShowPassword((prev) => !prev)}
             className="absolute right-2 top-1/2 transform -translate-y-1/2 text-neutral-400 hover:text-white focus:outline-none cursor-pointer"
-            aria-label={showPassword ? "Hide password" : "Show password"}
           >
             {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
           </button>
@@ -105,12 +90,6 @@ const LoginPage = () => {
         </div>
 
         <Button label="Login" variant="danger" isLoading={loading} />
-
-        <Button
-          onClick={handleForgetPassword}
-          label="Forgot password?"
-          variant="underline"
-        />
       </form>
     </div>
   );

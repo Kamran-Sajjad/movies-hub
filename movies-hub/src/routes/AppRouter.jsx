@@ -7,7 +7,6 @@ import {
 } from "./routeConstants";
 import { ProtectedRoute } from "../components/validation/ProtectedRoute";
 import { ToastContainer } from "react-toastify";
-import Error404 from "../pages/Invalid/Error404";
 
 const AppRouter = () => {
   return (
