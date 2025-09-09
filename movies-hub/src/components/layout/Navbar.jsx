@@ -2,16 +2,17 @@ import React, { useContext } from "react";
 import { Button } from "../ui/Button";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../routes/routeConstants";
+import { useAuthStore } from "../../lib/store/useAuthStore";
 
 const Navbar = () => {
   const [showMenu, setShowMenu] = React.useState(false);
   const navigate = useNavigate();
-
+  const logout = useAuthStore((state) => state.logout);
   const handleHomeButtonClick = () => navigate(ROUTES.MOVIES);
   const handleFavoritesButtonClick = () => navigate(ROUTES.FAVORITE);
   const handleProfileButtonClick = () => {};
   const handleLogoutButtonClick = () => {
-    localStorage.removeItem("token");
+    logout();
     navigate(ROUTES.LOGIN);
   };
 

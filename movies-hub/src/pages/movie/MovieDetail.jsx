@@ -4,6 +4,7 @@ import { MOVIES_API } from "../../lib/api";
 import Wrapper from "../../components/layout/Wrapper";
 import { Button } from "../../components/ui/Button";
 import { useFavorites } from "../../utils/hooks/useFavorites";
+import { Loader2 } from "lucide-react";
 
 const MovieDetail = () => {
   const { id } = useParams();
@@ -28,7 +29,12 @@ const MovieDetail = () => {
   }, [id]);
 
   if (loading) {
-    return <p className="text-gray-400 p-6">Loading movie details...</p>;
+    return (
+      <div className="flex p-6 gap-2">
+        <span className="text-gray-400">Loading movie detail...</span>
+        <Loader2 className="animate-spin w-5 h-5 text-gray-600" />
+      </div>
+    );
   }
 
   if (!movieDetail) {

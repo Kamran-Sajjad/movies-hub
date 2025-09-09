@@ -1,35 +1,19 @@
-
-
-
-import { useState, useEffect } from "react";
-import { successToast, errorToast } from "../displayToast"; 
+import { useFavoritesStore } from "../../lib/store/useFavoritesStore";
+import { successToast, errorToast } from "../displayToast";
 
 export const useFavorites = (movie) => {
-  const [isFavorite, setIsFavorite] = useState(false);
+  const { favorites, toggleFavorite } = useFavoritesStore();
 
-  useEffect(() => {
-    if (!movie?.id) return;
-    const storedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
-    setIsFavorite(storedFavorites.some((fav) => fav.id === movie.id));
-  }, [movie?.id]);
+  const isFavorite = favorites.some((fav) => fav.id === movie?.id);
 
-  const toggleFavorite = () => {
-    if (!movie?.id) return;
-
-    const storedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
-    let updatedFavorites;
-
+  const handleToggleFavorite = () => {
+    toggleFavorite(movie);
     if (isFavorite) {
-      updatedFavorites = storedFavorites.filter((fav) => fav.id !== movie.id);
       errorToast(`${movie.title || "Movie"} removed from favorites ❌`);
     } else {
-      updatedFavorites = [...storedFavorites, movie];
       successToast(`${movie.title || "Movie"} added to favorites ❤️`);
     }
-
-    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
-    setIsFavorite(!isFavorite);
   };
 
-  return { isFavorite, toggleFavorite };
+  return { isFavorite, toggleFavorite: handleToggleFavorite };
 };

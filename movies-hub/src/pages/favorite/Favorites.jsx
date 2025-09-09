@@ -1,15 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import MovieCard from "../movie/MovieCard";
 import Wrapper from "../../components/layout/Wrapper";
 import { useMovieNavigation } from "../../utils/hooks/useMovieNavigation";
+import { useFavoritesStore } from "../../lib/store/useFavoritesStore";
+
 const Favorites = () => {
   const { handleMovieClick } = useMovieNavigation([]);
-  const [favorites, setFavorites] = useState([]);
-
-  useEffect(() => {
-    const storedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
-    setFavorites(storedFavorites);
-  }, []);
+  const favorites = useFavoritesStore((state) => state.favorites);
 
   return (
     <Wrapper>

@@ -5,6 +5,7 @@ import MovieCard from "./MovieCard";
 import useMovieStore from "../../lib/store/useMovieStore";
 import { Button } from "../../components/ui/Button";
 import { useMovieNavigation } from "../../utils/hooks/useMovieNavigation";
+import { Loader2 } from "lucide-react";
 
 const MoviesSection = () => {
   const {
@@ -24,7 +25,7 @@ const MoviesSection = () => {
   useEffect(() => {
     if (movies.length === 0) fetchMovies();
   }, [movies]);
-
+  const handleSearchField = (e) => searchMovies(e.target.value);
   return (
     <Wrapper>
       <section className="px-8 py-6">
@@ -37,14 +38,20 @@ const MoviesSection = () => {
             type="text"
             placeholder="Search movies..."
             value={query}
-            onChange={(e) => searchMovies(e.target.value)}
+            onChange={handleSearchField}
             className="w-full sm:w-72 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
 
-        {loading ? <p className="text-gray-400">Loading movies...</p>:<></>}
-        {error ? <p className="text-red-500">{error}</p>:<></>}
-        {/* {error && <p className="text-red-500">{error}</p>} */}
+        {loading ? (
+          <div className="flex gap-2">
+            <span className="text-gray-400">Loading movies...</span>
+            <Loader2 className="animate-spin w-5 h-5 text-gray-600" />
+          </div>
+        ) : (
+          <></>
+        )}
+        {error ? <p className="text-red-500">{error}</p> : <></>}
 
         {!loading && movies.length > 0 ? (
           <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
