@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { getMoviesApi, searchMoviesApi } from "../../lib/api/index";
+import { MOVIES_API } from "../../lib/api/index";
 
 const useMovieStore = create((set, get) => ({
   movies: [],
@@ -12,7 +12,7 @@ const useMovieStore = create((set, get) => ({
     const { page } = get();
     set({ loading: true, error: null });
     try {
-      const response = await getMoviesApi(page);
+      const response = await MOVIES_API.getAllMovies(page);
       set({ movies: response.data.results || [] });
     } catch (err) {
       set({ error: err.message });
@@ -28,7 +28,7 @@ const useMovieStore = create((set, get) => ({
       return;
     }
     try {
-      const response = await searchMoviesApi(query, page);
+      const response = await MOVIES_API.searchMovies(query, page);
       set({ movies: response.data.results || [] });
     } catch (err) {
       set({ error: err.message });
@@ -41,14 +41,14 @@ const useMovieStore = create((set, get) => ({
     const { query, page } = get();
     const newPage = page + 1;
     set({ page: newPage });
-    query ? get().searchMovies(query, newPage) : get().fetchMovies();
+    query ? get().MOVIES_API.searchMovies(query, newPage) : get().fetchMovies();
   },
 
   prevPage: async () => {
     const { query, page } = get();
     const newPage = Math.max(1, page - 1);
     set({ page: newPage });
-    query ? get().searchMovies(query, newPage) : get().fetchMovies();
+    query ? get().MOVIES_API.searchMovies(query, newPage) : get().fetchMovies();
   },
 }));
 

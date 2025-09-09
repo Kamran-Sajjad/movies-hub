@@ -1,30 +1,42 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { routes } from "./routeConstants";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import {
+  protectedRoutes,
+  publicRoutes,
+  commonRoutes,
+  ROUTES,
+} from "./routeConstants";
 import { ProtectedRoute } from "../components/validation/ProtectedRoute";
 import { ToastContainer } from "react-toastify";
-import Error404 from "../pages/Invalid/Error404";
 
 const AppRouter = () => {
   return (
     <BrowserRouter>
       <Routes>
-        {routes.map(({ path, element: Element, isProtected }) => (
+        {publicRoutes.map(({ path, element: Element }) => (
+          <Route key={path} path={path} element={<Element />} />
+        ))}
+
+        {protectedRoutes.map(({ path, element: Element }) => (
           <Route
             key={path}
             path={path}
             element={
-              isProtected ? (
-                <ProtectedRoute>{<Element />}</ProtectedRoute>
-              ) : (
+              <ProtectedRoute>
                 <Element />
-              )
+              </ProtectedRoute>
             }
           />
         ))}
-        <Route path="*" element={<Error404 />} />
+
+        {commonRoutes.map(({ path, element: Element }) => (
+          <Route key={path} path={path} element={<Element />} />
+        ))}
+
+        <Route path="*" element={<Navigate to={ROUTES.ERROR} />} />
       </Routes>
       <ToastContainer />
     </BrowserRouter>
   );
 };
+
 export default AppRouter;

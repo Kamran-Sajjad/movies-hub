@@ -1,7 +1,9 @@
+
+
 import React from "react";
 
 const baseStyles =
-  "rounded-xl px-4 py-2 font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2";
+  "rounded-xl px-4 py-2 font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 flex items-center justify-center";
 
 const variants = {
   primary: "bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500",
@@ -22,13 +24,19 @@ export const Button = ({
   onClick,
   className = "",
   disabled = false,
+  isLoading = false,
 }) => {
   return (
     <button
-      onClick={disabled ? undefined : onClick}
+      onClick={disabled || isLoading ? undefined : onClick}
       className={`${baseStyles} ${variants[variant]} ${className}`}
+      disabled={disabled || isLoading}
     >
-      {label}
+      {isLoading ? (
+        <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+      ) : (
+        label
+      )}
     </button>
   );
 };

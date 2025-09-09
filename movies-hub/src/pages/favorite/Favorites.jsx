@@ -1,11 +1,10 @@
-// src/pages/Favorites.jsx
+
 import React, { useEffect, useState } from "react";
 import MovieCard from "../movie/MovieCard";
 import Wrapper from "../../components/layout/Wrapper";
-import { useNavigate } from "react-router-dom";
-import { ROUTES } from "../../routes/routeConstants";
+import { useMovieNavigation } from "../../utils/hooks/useMovieNavigation";
 const Favorites = () => {
-  const navigate = useNavigate();
+ const {handleMovieClick}=useMovieNavigation([]);
   const [favorites, setFavorites] = useState([]);
 
   useEffect(() => {
@@ -13,8 +12,6 @@ const Favorites = () => {
     setFavorites(storedFavorites);
   }, []);
 
-  const handleMovieClick = (movie) =>
-    navigate(ROUTES.MOVIE_ID.replace(":id", movie.id));
 
   return (
     <Wrapper>
@@ -31,7 +28,7 @@ const Favorites = () => {
               <MovieCard
                 key={movie.id}
                 movie={movie}
-                onClick={handleMovieClick}
+                onClick={()=>handleMovieClick(movie)}
               />
             ))}
           </div>

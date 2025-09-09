@@ -7,9 +7,9 @@ const Navbar = () => {
   const [showMenu, setShowMenu] = React.useState(false);
   const navigate = useNavigate();
 
-  const handleHomeButtonClick = () => navigate(ROUTES.HOME);
+  const handleHomeButtonClick = () => navigate(ROUTES.MOVIES);
   const handleFavoritesButtonClick = () => navigate(ROUTES.FAVORITE);
-  const handleProfileButtonClick = () => navigate("/profile");
+  const handleProfileButtonClick = () => {};
   const handleLogoutButtonClick = () => {
     localStorage.removeItem("token");
     navigate(ROUTES.LOGIN);
@@ -31,11 +31,13 @@ const Navbar = () => {
           label="Home"
           onClick={handleHomeButtonClick}
           variant="secondary"
+          isLoading={false}
         />
         <Button
           label="Favorites"
           onClick={handleFavoritesButtonClick}
           variant="secondary"
+          isLoading={false}
         />
 
         <div className="relative">
