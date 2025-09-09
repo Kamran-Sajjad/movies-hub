@@ -17,7 +17,7 @@ const Error404 = () => {
       <Button
         label={"Go Back Home"}
         variant="warning"
-        onClick={() => navigate(ROUTES.HOME)}
+        onClick={() => navigate(ROUTES.MOVIES)}
       />
     </section>
   );

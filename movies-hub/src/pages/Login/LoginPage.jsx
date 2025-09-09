@@ -3,41 +3,60 @@ import { Eye, EyeOff } from "lucide-react";
 import { successToast, errorToast } from "../../utils/displayToast";
 import { API_TOKEN } from "../../lib/constant/constants";
 import { useNavigate } from "react-router-dom";
-import { loginUserApi } from "../../lib/api";
+import { LOGIN_USER_API } from "../../lib/api";
+import { ROUTES } from "../../routes/routeConstants";
+import { Button } from "../../components/ui/Button";
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState({ email: "", password: "" });
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!email || !password) {
-      errorToast("Please enter both email and password.");
-      return;
+
+    setErrors({ email: "", password: "" });
+
+    let hasError = false;
+    if (!email) {
+      setErrors((prev) => ({ ...prev, email: "Please enter your email." }));
+      hasError = true;
     }
+    if (!password) {
+      setErrors((prev) => ({
+        ...prev,
+        password: "Please enter your password.",
+      }));
+      hasError = true;
+    }
+
+    if (hasError) return;
+
     try {
+      setLoading(true);
       const payload = { email, password };
-      const response = await loginUserApi(payload);
+      const response = await LOGIN_USER_API.login(payload);
       const data = response.data;
+
       successToast("Login successful!");
       setEmail("");
       setPassword("");
       localStorage.setItem("token", API_TOKEN);
-      navigate("/home");
+      navigate(ROUTES.MOVIES);
     } catch (error) {
       console.error("Login failed:", error);
+      errorToast("Invalid credentials. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleForgetPassword = () => {
     alert("Forgot password functionality not implemented yet.");
   };
-  const handleEmailChange = (e) =>  setEmail(e.target.value);
-  const handlePasswordChange = (e) =>  setPassword(e.target.value);
-
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-neutral-700 px-4">
@@ -47,17 +66,20 @@ const LoginPage = () => {
       >
         <h2 className="text-2xl font-bold mb-4 text-white">Login</h2>
 
-        {error && <div className="text-red-600 mb-2 text-base">{error}</div>}
-
-        <input
-          id="email"
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={email}
-          onChange={handleEmailChange}
-          className="mb-3 px-3 py-2 rounded bg-neutral-700 border border-neutral-600 text-white focus:outline-none focus:ring-2 focus:ring-red-600 w-full"
-        />
+        <div className="mb-3">
+          <input
+            id="email"
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="px-3 py-2 rounded bg-neutral-700 border border-neutral-600 text-white focus:outline-none focus:ring-2 focus:ring-red-600 w-full"
+          />
+          {errors.email && (
+            <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+          )}
+        </div>
 
         <div className="relative mb-3">
           <input
@@ -66,7 +88,7 @@ const LoginPage = () => {
             name="password"
             placeholder="Password"
             value={password}
-            onChange={handlePasswordChange}
+            onChange={(e) => setPassword(e.target.value)}
             className="px-3 py-2 rounded bg-neutral-700 border border-neutral-600 text-white focus:outline-none focus:ring-2 focus:ring-red-600 w-full pr-10"
           />
           <button
@@ -77,22 +99,18 @@ const LoginPage = () => {
           >
             {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
           </button>
+          {errors.password && (
+            <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+          )}
         </div>
 
-        <button
-          type="submit"
-          className="mt-2 py-2 rounded bg-red-600 text-white font-bold text-base hover:bg-red-700 transition-colors"
-        >
-          Login
-        </button>
+        <Button label="Login" variant="danger" isLoading={loading} />
 
-        <button
-          type="button"
+        <Button
           onClick={handleForgetPassword}
-          className="mt-3 text-sm text-red-400 hover:underline focus:outline-none"
-        >
-          Forgot password?
-        </button>
+          label="Forgot password?"
+          variant="underline"
+        />
       </form>
     </div>
   );

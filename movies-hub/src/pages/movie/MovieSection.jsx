@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ROUTES } from "../../routes/routeConstants";
 import Wrapper from "../../components/layout/Wrapper";
 import MovieCard from "./MovieCard";
 import useMovieStore from "../../lib/store/useMovieStore";
 import { Button } from "../../components/ui/Button";
+import { useMovieNavigation } from "../../utils/hooks/useMovieNavigation";
 
 const MoviesSection = () => {
   const {
@@ -18,20 +18,16 @@ const MoviesSection = () => {
     nextPage,
     prevPage,
   } = useMovieStore();
-
+  const { handleMovieClick } = useMovieNavigation([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     if (movies.length === 0) fetchMovies();
   }, [movies]);
 
-  const handleMovieCardClick = (movie) =>
-    navigate(ROUTES.MOVIE_ID.replace(":id", movie.id));
-
   return (
     <Wrapper>
       <section className="px-8 py-6">
-   
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
           <h2 className="text-3xl font-bold text-black">
             {query ? `Results for "${query}"` : "Trending Movies"}
@@ -46,8 +42,9 @@ const MoviesSection = () => {
           />
         </div>
 
-        {loading && <p className="text-gray-400">Loading movies...</p>}
-        {error && <p className="text-red-500">{error}</p>}
+        {loading ? <p className="text-gray-400">Loading movies...</p>:<></>}
+        {error ? <p className="text-red-500">{error}</p>:<></>}
+        {/* {error && <p className="text-red-500">{error}</p>} */}
 
         {!loading && movies.length > 0 ? (
           <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
@@ -55,7 +52,7 @@ const MoviesSection = () => {
               <MovieCard
                 key={movie.id}
                 movie={movie}
-                onClick={() => handleMovieCardClick(movie)}
+                onClick={() => handleMovieClick(movie)}
               />
             ))}
           </div>
@@ -63,8 +60,7 @@ const MoviesSection = () => {
           !loading && <p className="text-gray-400">No movies found.</p>
         )}
 
-     
-        <div className="flex justify-center items-center mt-8 gap-4">
+        <div className="flex justify-between items-center mt-8 gap-4">
           <Button
             onClick={prevPage}
             label={"Prev"}

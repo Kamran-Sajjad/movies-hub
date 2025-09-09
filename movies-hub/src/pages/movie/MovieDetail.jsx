@@ -1,25 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getMovieByIdApi } from "../../lib/api";
+import { MOVIES_API } from "../../lib/api";
 import Wrapper from "../../components/layout/Wrapper";
 import { Button } from "../../components/ui/Button";
+import { useFavorites } from "../../utils/hooks/useFavorites";
 
 const MovieDetail = () => {
   const { id } = useParams();
   const [movieDetail, setMovieDetail] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [isFavorite, setIsFavorite] = useState(false);
+  const { isFavorite, toggleFavorite } = useFavorites(movieDetail);
 
   useEffect(() => {
     const fetchMovie = async () => {
       setLoading(true);
       try {
-        const response = await getMovieByIdApi(id);
+        const response = await MOVIES_API.getMovieById(id);
         setMovieDetail(response.data);
-
-
-        const storedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
-        setIsFavorite(storedFavorites.some((fav) => fav.id === response.data.id));
       } catch (error) {
         console.error("Error fetching movie details:", error);
       } finally {
@@ -29,22 +26,6 @@ const MovieDetail = () => {
 
     fetchMovie();
   }, [id]);
-
-  const handleFavorite = () => {
-    if (!movieDetail) return;
-
-    const storedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
-    let updatedFavorites;
-
-    if (isFavorite) {
-      updatedFavorites = storedFavorites.filter((fav) => fav.id !== movieDetail.id);
-    } else {
-      updatedFavorites = [...storedFavorites, movieDetail];
-    }
-
-    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
-    setIsFavorite(!isFavorite);
-  };
 
   if (loading) {
     return <p className="text-gray-400 p-6">Loading movie details...</p>;
@@ -85,7 +66,8 @@ const MovieDetail = () => {
               Language: {movieDetail.original_language?.toUpperCase()}
             </p>
             <p className="text-yellow-400 mt-2 text-lg">
-              ⭐ {movieDetail.vote_average?.toFixed(1)} ({movieDetail.vote_count} votes)
+              ⭐ {movieDetail.vote_average?.toFixed(1)} (
+              {movieDetail.vote_count} votes)
             </p>
 
             <p className="text-gray-200 mt-6 leading-relaxed">
@@ -99,7 +81,7 @@ const MovieDetail = () => {
               <Button label="Watch Now" variant="outline" />
               <Button
                 label={isFavorite ? "Remove from Favorite" : "Add to Favorite"}
-                onClick={handleFavorite}
+                onClick={toggleFavorite}
                 variant={isFavorite ? "danger" : "secondary"}
               />
             </div>

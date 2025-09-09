@@ -1,25 +1,30 @@
-
 import React from "react";
-import HomePage from "../pages/Home/HomePage";
+import MovieSection from "../pages/movie/MovieSection";
 import LoginPage from "../pages/Login/LoginPage";
 import MovieDetail from "../pages/movie/MovieDetail";
 import Error404 from "../pages/Invalid/Error404";
 import Favorites from "../pages/favorite/Favorites";
+import TermsAndConditions from "../pages/common/TermsAndConditions";
 
+export const ROUTES = {
+  LOGIN: "/login",
+  MOVIES: "/movies",
+  MOVIE_ID: "/movie/:id",
+  ERROR: "/error404",
+  FAVORITE: "/favorites",
+  TERMS: "/terms",
+};
 
+export const protectedRoutes = [
+  { path: ROUTES.MOVIES, element: MovieSection },
+  { path: ROUTES.MOVIE_ID, element: MovieDetail },
+  { path: ROUTES.FAVORITE, element: Favorites },
+];
 
-export const ROUTES ={
-  LOGIN:'/login',
-  HOME:'/home',
-  MOVIE_ID:"/movie/:id",
-  ERROR:'/error404',
-  FAVORITE:'/favorites',
-}
+export const publicRoutes = [{ path: ROUTES.LOGIN, element: LoginPage }];
 
-export const routes = [
-  { path: ROUTES.LOGIN, element: LoginPage , isProtected: false },
-  { path: ROUTES.HOME, element: HomePage, isProtected: true },
-  { path: ROUTES.MOVIE_ID, element: MovieDetail, isProtected: true },
-  { path: ROUTES.ERROR, element: Error404, isProtected: false },
-  { path: ROUTES.FAVORITE, element: Favorites, isProtected: true },
+export const commonRoutes = [
+  
+  { path: '*', element: Error404 },
+  { path: ROUTES.TERMS, element: TermsAndConditions },
 ];
