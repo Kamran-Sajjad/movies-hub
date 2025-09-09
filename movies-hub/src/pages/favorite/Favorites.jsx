@@ -1,17 +1,15 @@
-
 import React, { useEffect, useState } from "react";
 import MovieCard from "../movie/MovieCard";
 import Wrapper from "../../components/layout/Wrapper";
 import { useMovieNavigation } from "../../utils/hooks/useMovieNavigation";
 const Favorites = () => {
- const {handleMovieClick}=useMovieNavigation([]);
+  const { handleMovieClick } = useMovieNavigation([]);
   const [favorites, setFavorites] = useState([]);
 
   useEffect(() => {
     const storedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
     setFavorites(storedFavorites);
   }, []);
-
 
   return (
     <Wrapper>
@@ -28,7 +26,7 @@ const Favorites = () => {
               <MovieCard
                 key={movie.id}
                 movie={movie}
-                onClick={()=>handleMovieClick(movie)}
+                onClick={() => handleMovieClick(movie)}
               />
             ))}
           </div>

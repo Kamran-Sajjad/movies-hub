@@ -24,6 +24,7 @@ export const protectedRoutes = [
 export const publicRoutes = [{ path: ROUTES.LOGIN, element: LoginPage }];
 
 export const commonRoutes = [
-  { path: ROUTES.ERROR, element: Error404 },
+  
+  { path: '*', element: Error404 },
   { path: ROUTES.TERMS, element: TermsAndConditions },
 ];

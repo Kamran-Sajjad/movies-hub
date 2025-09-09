@@ -7,6 +7,7 @@ import {
 } from "./routeConstants";
 import { ProtectedRoute } from "../components/validation/ProtectedRoute";
 import { ToastContainer } from "react-toastify";
+import Error404 from "../pages/Invalid/Error404";
 
 const AppRouter = () => {
   return (
@@ -31,8 +32,6 @@ const AppRouter = () => {
         {commonRoutes.map(({ path, element: Element }) => (
           <Route key={path} path={path} element={<Element />} />
         ))}
-
-        <Route path="*" element={<Navigate to={ROUTES.ERROR} />} />
       </Routes>
       <ToastContainer />
     </BrowserRouter>
