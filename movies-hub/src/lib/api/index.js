@@ -1,7 +1,7 @@
 import apiClient from "./axios";
 import { API_LOGIN_URL, API_BASE_URL, API_TOKEN } from "../constant/constants";
 
-export const LOGIN_USER_API = {
+export const AUTH_API = {
   login: (payload) => {
     return apiClient.post(`${API_LOGIN_URL}/users/login/`, payload);
   },

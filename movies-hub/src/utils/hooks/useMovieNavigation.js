@@ -6,6 +6,5 @@ export const useMovieNavigation = () => {
 
   const handleMovieClick = (movie) =>
     navigate(ROUTES.MOVIE_ID.replace(":id", movie.id));
-
   return { handleMovieClick };
 };

@@ -1,44 +1,35 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useParams } from "react-router-dom";
 import { MOVIES_API } from "../../lib/api";
-import Wrapper from "../../components/layout/Wrapper";
+import HeaderFooterWrapper from "../../components/layout/HeaderFooterWrapper";
 import { Button } from "../../components/ui/Button";
 import { useFavorites } from "../../utils/hooks/useFavorites";
-import { Loader2 } from "lucide-react";
 import { Loader } from "../../components/ui/Loader";
+import { useQuery } from "@tanstack/react-query";
 
 const MovieDetail = () => {
   const { id } = useParams();
-  const [movieDetail, setMovieDetail] = useState(null);
-  const [loading, setLoading] = useState(false);
+
+  const { data: movieDetail, isLoading, isError } = useQuery({
+    queryKey: ["movie", id],
+    queryFn: async () => {
+      const response = await MOVIES_API.getMovieById(id);
+      return response.data;
+    },
+  });
+
   const { isFavorite, toggleFavorite } = useFavorites(movieDetail);
 
-  useEffect(() => {
-    const fetchMovie = async () => {
-      setLoading(true);
-      try {
-        const response = await MOVIES_API.getMovieById(id);
-        setMovieDetail(response.data);
-      } catch (error) {
-        console.error("Error fetching movie details:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchMovie();
-  }, [id]);
-
-  if (loading) {
-    return <Loader label={"Loading movie detail..."} />;
+  if (isLoading) {
+    return <Loader label="Loading movie detail..." />;
   }
 
-  if (!movieDetail) {
+  if (isError || !movieDetail) {
     return <p className="text-gray-400 p-6">Movie not found.</p>;
   }
 
   return (
-    <Wrapper>
+    <HeaderFooterWrapper>
       <section className="relative z-10 w-full min-h-screen overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center"
@@ -90,7 +81,7 @@ const MovieDetail = () => {
           </div>
         </div>
       </section>
-    </Wrapper>
+    </HeaderFooterWrapper>
   );
 };
 
