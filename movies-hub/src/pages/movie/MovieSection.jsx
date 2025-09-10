@@ -6,6 +6,7 @@ import useMovieStore from "../../lib/store/useMovieStore";
 import { Button } from "../../components/ui/Button";
 import { useMovieNavigation } from "../../utils/hooks/useMovieNavigation";
 import { Loader2 } from "lucide-react";
+import { Loader } from "../../components/ui/Loader";
 
 const MoviesSection = () => {
   const {
@@ -26,6 +27,7 @@ const MoviesSection = () => {
     if (movies.length === 0) fetchMovies();
   }, [movies]);
   const handleSearchField = (e) => searchMovies(e.target.value);
+  
   return (
     <Wrapper>
       <section className="px-8 py-6">
@@ -43,14 +45,7 @@ const MoviesSection = () => {
           />
         </div>
 
-        {loading ? (
-          <div className="flex gap-2">
-            <span className="text-gray-400">Loading movies...</span>
-            <Loader2 className="animate-spin w-5 h-5 text-gray-600" />
-          </div>
-        ) : (
-          <></>
-        )}
+        {loading ? <Loader label={"Loading Movies..."} /> : <></>}
         {error ? <p className="text-red-500">{error}</p> : <></>}
 
         {!loading && movies.length > 0 ? (
