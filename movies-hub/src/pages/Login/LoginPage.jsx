@@ -9,7 +9,7 @@ import { AUTH_API } from "../../lib/api";
 import { ROUTES } from "../../routes/routeConstants";
 import { Button } from "../../components/ui/Button";
 import { InputField } from "../../components/ui/InputField";
-import { FormWrapper } from "../../components/layout/FormWrapper";
+import { AuthFormWrapper } from "../../components/layout/AuthFormWrapper";
 import { useAuthStore } from "../../lib/store/useAuthStore";
 import { API_TOKEN } from "../../lib/constant/constants";
 import { LOGIN_INPUT_FIELDS } from "../../components/ui/FieldData";
@@ -25,7 +25,7 @@ const LoginPage = () => {
     reset,
   } = useForm();
 
-  const loginMutation = useMutation({
+  const {mutate,isPending} = useMutation({
     mutationFn: (data) => AUTH_API.login(data),
     onSuccess: () => {
       successToast("Login successful!");
@@ -39,13 +39,11 @@ const LoginPage = () => {
     },
   });
 
-  const onSubmit = (data) => {
-    loginMutation.mutate(data);
-  };
+  const submitFormData = (payload) => mutate(payload);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-neutral-700 px-4">
-      <FormWrapper title="Login" onSubmit={handleSubmit(onSubmit)}>
+      <AuthFormWrapper title="Login" onSubmit={handleSubmit(submitFormData)}>
         {LOGIN_INPUT_FIELDS.map(({ name, type, placeholder, validation }) => (
           <InputField
             key={name}
@@ -61,14 +59,14 @@ const LoginPage = () => {
         <Button
           label="Login"
           variant="danger"
-          isLoading={loginMutation.isPending}
+          isLoading={isPending}
         />
         <Button
           label="Forget Password"
           variant="underline"
           onClick={() => alert("Forgot password functionality not implemented yet.")}
         />
-      </FormWrapper>
+      </AuthFormWrapper>
     </div>
   );
 };

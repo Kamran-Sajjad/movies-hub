@@ -9,7 +9,7 @@ export const useFavorites = (movie) => {
   const handleToggleFavorite = () => {
     toggleFavorite(movie);
     if (isFavorite) {
-      errorToast(`${movie.title || "Movie"} removed from favorites ❌`);
+      successToast(`${movie.title || "Movie"} removed from favorites 🚫`);
     } else {
       successToast(`${movie.title || "Movie"} added to favorites ❤️`);
     }

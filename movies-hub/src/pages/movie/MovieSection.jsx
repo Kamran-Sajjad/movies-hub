@@ -12,7 +12,6 @@ const MoviesSection = () => {
   const [query, setQuery] = useState("");
   const handleInputField = (e) => setQuery(e.target.value);
 
-
   const { data, error, fetchNextPage, hasNextPage, isLoading, isError } =
     useInfiniteQuery({
       queryKey: ["movies", query],
@@ -21,6 +20,7 @@ const MoviesSection = () => {
           ? await MOVIES_API.searchMovies(query, pageParam)
           : await MOVIES_API.getAllMovies(pageParam);
 
+        // debugger;
         return { results: response.data.results, nextPage: pageParam + 1 };
       },
       getNextPageParam: (lastPage) => {
@@ -47,8 +47,8 @@ const MoviesSection = () => {
           />
         </div>
 
-        {isLoading ? <Loader label="Loading Movies..." />:<></>}
-        {isError ? <p className="text-red-500">{error.message}</p>:<></>}
+        {isLoading ? <Loader label="Loading Movies..." /> : <></>}
+        {isError ? <p className="text-red-500">{error.message}</p> : <></>}
 
         <InfiniteScroll
           dataLength={movies.length}

@@ -1,11 +1,12 @@
-import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 import AppRouter from "./routes/AppRouter";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+const queryClient = new QueryClient();
 function App() {
   return (
-
-    
-    <AppRouter />
-  )
+    <QueryClientProvider client={queryClient}>
+      <AppRouter />
+    </QueryClientProvider>
+  );
 }
 export default App;

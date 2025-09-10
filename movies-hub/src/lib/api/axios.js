@@ -2,7 +2,8 @@ import axios from "axios";
 
 import { successToast, errorToast } from "../../utils/displayToast";
 
-import { API_BASE_URL, API_TOKEN } from "../constant/constants";
+import { API_BASE_URL } from "../constant/constants";
+import { useAuthStore } from "../store/useAuthStore";
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
@@ -13,8 +14,9 @@ const apiClient = axios.create({
 
 apiClient.interceptors.request.use(
   (config) => {
-    if (API_TOKEN) {
-      config.headers["Authorization"] = `Bearer ${API_TOKEN}`;
+    const token = useAuthStore.getState().token;
+    if (token) {
+      config.headers["Authorization"] = `Bearer ${token}`;
     }
     return config;
   },
