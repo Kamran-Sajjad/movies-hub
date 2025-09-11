@@ -19,7 +19,7 @@ const variants = {
 };
 
 export const Button = ({
-  label,
+  content,
   variant = "secondary",
   onClick,
   className = "",
@@ -35,7 +35,7 @@ export const Button = ({
       {isLoading ? (
        <Loader label={"loading..."}/>
       ) : (
-        label
+        content
       )}
     </button>
   );

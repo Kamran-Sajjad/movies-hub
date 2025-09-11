@@ -18,7 +18,7 @@ const MovieCard = ({ movie, onClick }) => {
         onClick={handleClick}
         className="!p-2 !rounded-full absolute top-3 right-3 w-9 h-9 flex items-center justify-center"
         variant="ghost"
-        label={
+        content={
           <Heart
             size={20}
             className={isFavorite ? "fill-red-600 text-red-600" : "text-white"}

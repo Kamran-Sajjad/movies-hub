@@ -15,6 +15,7 @@ const apiClient = axios.create({
 apiClient.interceptors.request.use(
   (config) => {
     const token = useAuthStore.getState().token;
+
     if (token) {
       config.headers["Authorization"] = `Bearer ${token}`;
     }
@@ -29,7 +30,11 @@ apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response) {
-      const errorData = error.response.data;
+      const { status, data } = error.response;
+      if (status === 401) {
+        errorToast("Invalid Token! Please login again");
+        useAuthStore.getState().logout();
+      }
       errorToast(errorData.message || "Something went wrong.");
     } else if (error.request) {
       errorToast("No response from server. Please check your connection.");

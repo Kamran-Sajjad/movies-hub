@@ -6,6 +6,7 @@ import { Button } from "../../components/ui/Button";
 import { useFavorites } from "../../utils/hooks/useFavorites";
 import { Loader } from "../../components/ui/Loader";
 import { useQuery } from "@tanstack/react-query";
+import { REACT_QUERY_CONFIG } from "../../lib/constant/queryConfig";
 
 const MovieDetail = () => {
   const { id } = useParams();
@@ -16,6 +17,7 @@ const MovieDetail = () => {
       const response = await MOVIES_API.getMovieById(id);
       return response.data;
     },
+    ...REACT_QUERY_CONFIG.DEFAULT,
   });
 
   const { isFavorite, toggleFavorite } = useFavorites(movieDetail);
@@ -71,9 +73,9 @@ const MovieDetail = () => {
             </p>
 
             <div className="mt-6 flex gap-4">
-              <Button label="Watch Now" variant="outline" />
+              <Button content="Watch Now" variant="outline" />
               <Button
-                label={isFavorite ? "Remove from Favorite" : "Add to Favorite"}
+                content={isFavorite ? "Remove from Favorite" : "Add to Favorite"}
                 onClick={toggleFavorite}
                 variant={isFavorite ? "danger" : "secondary"}
               />

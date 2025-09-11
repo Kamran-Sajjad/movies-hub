@@ -16,7 +16,7 @@ import { LOGIN_INPUT_FIELDS } from "../../components/ui/FieldData";
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const setToken = useAuthStore((state) => state.setToken);
+  const {setToken} = useAuthStore();
 
   const {
     register,
@@ -26,7 +26,7 @@ const LoginPage = () => {
   } = useForm();
 
   const {mutate,isPending} = useMutation({
-    mutationFn: (data) => AUTH_API.login(data),
+    mutationFn: (payload) => AUTH_API.login(payload),
     onSuccess: () => {
       successToast("Login successful!");
       reset();
@@ -57,12 +57,12 @@ const LoginPage = () => {
         ))}
 
         <Button
-          label="Login"
+          content="Login"
           variant="danger"
           isLoading={isPending}
         />
         <Button
-          label="Forget Password"
+          content="Forget Password"
           variant="underline"
           onClick={() => alert("Forgot password functionality not implemented yet.")}
         />
