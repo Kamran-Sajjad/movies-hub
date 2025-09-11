@@ -22,21 +22,19 @@ export const Button = ({
   content,
   variant = "secondary",
   onClick,
+  type = "button",
   className = "",
   disabled = false,
   isLoading = false,
 }) => {
   return (
     <button
+      type={type}
       onClick={disabled || isLoading ? undefined : onClick}
       className={`${baseStyles} ${variants[variant]} ${className}`}
       disabled={disabled || isLoading}
     >
-      {isLoading ? (
-       <Loader label={"loading..."}/>
-      ) : (
-        content
-      )}
+      {isLoading ? <Loader loaderMessage={"loading..."} /> : content}
     </button>
   );
 };

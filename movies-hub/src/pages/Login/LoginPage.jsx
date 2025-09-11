@@ -18,6 +18,7 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const {setToken} = useAuthStore();
 
+  const submitFormData = (payload) => mutate(payload);
   const {
     register,
     handleSubmit,
@@ -39,7 +40,6 @@ const LoginPage = () => {
     },
   });
 
-  const submitFormData = (payload) => mutate(payload);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-neutral-700 px-4">
@@ -57,11 +57,13 @@ const LoginPage = () => {
         ))}
 
         <Button
+        type="submit"
           content="Login"
           variant="danger"
           isLoading={isPending}
         />
         <Button
+        type="button"
           content="Forget Password"
           variant="underline"
           onClick={() => alert("Forgot password functionality not implemented yet.")}

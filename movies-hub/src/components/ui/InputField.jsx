@@ -1,6 +1,6 @@
-
 import React, { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
+import { Button } from "./Button";
 
 export const InputField = ({
   name,
@@ -17,6 +17,7 @@ export const InputField = ({
 
   return (
     <div className="relative mb-3">
+      {" "}
       <input
         id={name}
         type={inputType}
@@ -26,18 +27,18 @@ export const InputField = ({
           focus:outline-none focus:ring-2 focus:ring-red-600 w-full
           ${type === "password" ? "pr-10" : ""}`}
       />
-
       {type === "password" && (
-        <button
+        <Button
           type="button"
           onClick={() => setShowPassword((prev) => !prev)}
-          className="absolute right-2 top-1/2 transform -translate-y-1/2 text-neutral-400 hover:text-white focus:outline-none cursor-pointer"
-        >
-          {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-        </button>
+          variant="ghost"
+          className="absolute right-2 top-5 -translate-y-1/2 p-1 text-neutral-400 hover:text-white focus:outline-none cursor-pointer"
+          content={showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+        />
       )}
-
-      {error ? <p className="text-red-500 text-sm mt-1">{error.message}</p>:<></>}
+      <div className="min-h-[20px]">
+        {error && <p className="text-red-500 text-sm">{error.message}</p>}
+      </div>
     </div>
   );
 };

@@ -23,7 +23,7 @@ const MovieDetail = () => {
   const { isFavorite, toggleFavorite } = useFavorites(movieDetail);
 
   if (isLoading) {
-    return <Loader label="Loading movie detail..." />;
+    return <Loader loaderMessage="Loading movie detail..." />;
   }
 
   if (isError || !movieDetail) {
