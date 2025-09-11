@@ -1,4 +1,3 @@
-
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -8,15 +7,16 @@ import { successToast, errorToast } from "../../utils/displayToast";
 import { AUTH_API } from "../../lib/api";
 import { ROUTES } from "../../routes/routeConstants";
 import { Button } from "../../components/ui/Button";
-import { InputField } from "../../components/ui/InputField";
 import { AuthFormWrapper } from "../../components/layout/AuthFormWrapper";
 import { useAuthStore } from "../../lib/store/useAuthStore";
 import { API_TOKEN } from "../../lib/constant/constants";
-import { LOGIN_INPUT_FIELDS } from "../../components/ui/FieldData";
-
+import { LOGIN_INPUT_FIELDS } from "../../utils/data/FieldData";
+import { FieldFactory } from "../../lib/factory/FieldFactory";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { loginSchema } from "../../components/validation/ValidationSchema";
 const LoginPage = () => {
   const navigate = useNavigate();
-  const {setToken} = useAuthStore();
+  const { setToken } = useAuthStore();
 
   const submitFormData = (payload) => mutate(payload);
   const {
@@ -24,9 +24,11 @@ const LoginPage = () => {
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm();
+  } = useForm({
+    resolver: zodResolver(loginSchema),
+  });
 
-  const {mutate,isPending} = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: (payload) => AUTH_API.login(payload),
     onSuccess: () => {
       successToast("Login successful!");
@@ -40,33 +42,31 @@ const LoginPage = () => {
     },
   });
 
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-neutral-700 px-4">
       <AuthFormWrapper title="Login" onSubmit={handleSubmit(submitFormData)}>
-        {LOGIN_INPUT_FIELDS.map(({ name, type, placeholder, validation }) => (
-          <InputField
-            key={name}
-            name={name}
-            type={type}
-            placeholder={placeholder}
+        {LOGIN_INPUT_FIELDS.map((field) => (
+          <FieldFactory
+            key={field.name}
+            field={field}
             register={register}
-            validation={validation}
-            error={errors[name]}
+            error={errors[field.name]}
           />
         ))}
 
         <Button
-        type="submit"
+          type="submit"
           content="Login"
           variant="danger"
           isLoading={isPending}
         />
         <Button
-        type="button"
+          type="button"
           content="Forget Password"
           variant="underline"
-          onClick={() => alert("Forgot password functionality not implemented yet.")}
+          onClick={() =>
+            alert("Forgot password functionality not implemented yet.")
+          }
         />
       </AuthFormWrapper>
     </div>
