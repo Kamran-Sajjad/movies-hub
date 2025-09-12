@@ -1,7 +1,7 @@
 import React from "react";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
-const Wrapper = ({ children }) => {
+const HeaderFooterWrapper = ({ children }) => {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -11,4 +11,4 @@ const Wrapper = ({ children }) => {
   );
 };
 
-export default Wrapper;
+export default HeaderFooterWrapper;
