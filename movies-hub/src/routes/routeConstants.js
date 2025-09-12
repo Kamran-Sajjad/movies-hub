@@ -1,6 +1,6 @@
 import React from "react";
 import MovieSection from "../pages/movie/MovieSection";
-import LoginPage from "../pages/Login/LoginPage";
+import LoginPage from "../pages/login/LoginPage";
 import MovieDetail from "../pages/movie/MovieDetail";
 import Error404 from "../pages/Invalid/Error404";
 import Favorites from "../pages/favorite/Favorites";

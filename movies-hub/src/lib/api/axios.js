@@ -4,6 +4,7 @@ import { successToast, errorToast } from "../../utils/displayToast";
 
 import { API_BASE_URL } from "../constant/constants";
 import { useAuthStore } from "../store/useAuthStore";
+import { ROUTES } from "../../routes/routeConstants";
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
@@ -34,6 +35,7 @@ apiClient.interceptors.response.use(
       if (status === 401) {
         errorToast("Invalid Token! Please login again");
         useAuthStore.getState().logout();
+        window.location.href = ROUTES.LOGIN;
       }
       errorToast(errorData.message || "Something went wrong.");
     } else if (error.request) {

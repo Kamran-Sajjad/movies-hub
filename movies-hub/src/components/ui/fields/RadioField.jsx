@@ -4,8 +4,7 @@ export const RadioField = ({
   name,
   options = [],
   register,
-  validation,
-  error,
+  errorMessage,
 }) => {
   return (
     <div className="mb-3">
@@ -18,7 +17,7 @@ export const RadioField = ({
             <input
               type="radio"
               value={option}
-              {...register(name, validation)}
+              {...register(name)}
               className="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500"
             />
             <span>{option}</span>
@@ -26,7 +25,7 @@ export const RadioField = ({
         ))}
       </div>
       <div className="min-h-[20px]">
-        {error && <p className="text-red-500 text-sm">{error.message}</p>}
+        {errorMessage ? <p className="text-red-500 text-sm">{errorMessage}</p>:<></>}
       </div>
     </div>
   );

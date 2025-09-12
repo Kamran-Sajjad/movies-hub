@@ -7,7 +7,7 @@ import { useAuthStore } from "../../lib/store/useAuthStore";
 const Navbar = () => {
   const [showMenu, setShowMenu] = React.useState(false);
   const navigate = useNavigate();
-  const {logout} = useAuthStore();
+  const logout = useAuthStore((state) => state.logout);
 
   const handleHomeButtonClick = () => navigate(ROUTES.MOVIES);
   const handleFavoritesButtonClick = () => navigate(ROUTES.FAVORITE);

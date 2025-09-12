@@ -7,14 +7,11 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState } from "react";
 
 function App() {
-  const [queryClient] = useState(
-    () =>
-      new QueryClient({
-        defaultOptions: {
-          queries: REACT_QUERY_CONFIG.DEFAULT,
-        },
-      })
-  );
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: REACT_QUERY_CONFIG.DEFAULT,
+    },
+  });
 
   return (
     <QueryClientProvider client={queryClient}>

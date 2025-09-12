@@ -6,8 +6,7 @@ export const PasswordField = ({
   name,
   placeholder,
   register,
-  validation = {},
-  error,
+  errorMessage,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   const inputType = showPassword ? "text" : "password";
@@ -18,7 +17,7 @@ export const PasswordField = ({
         id={name}
         type={inputType}
         placeholder={placeholder}
-        {...register(name, validation)}
+        {...register(name)}
         className="px-3 py-2 rounded bg-neutral-700 border border-neutral-600 text-white 
           focus:outline-none focus:ring-2 focus:ring-red-600 w-full pr-10"
       />
@@ -30,7 +29,11 @@ export const PasswordField = ({
         content={showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
       />
       <div className="min-h-[20px]">
-        {error && <p className="text-red-500 text-sm">{error.message}</p>}
+        {errorMessage ? (
+          <p className="text-red-500 text-sm">{errorMessage}</p>
+        ) : (
+          <></>
+        )}
       </div>
     </div>
   );

@@ -10,10 +10,9 @@ import { Button } from "../../components/ui/Button";
 import { AuthFormWrapper } from "../../components/layout/AuthFormWrapper";
 import { useAuthStore } from "../../lib/store/useAuthStore";
 import { API_TOKEN } from "../../lib/constant/constants";
-import { LOGIN_INPUT_FIELDS } from "../../utils/data/FieldData";
-import { FieldFactory } from "../../lib/factory/FieldFactory";
+import { loginFieldsData } from "../../utils/data/FieldData";
+import { InputFieldSelection } from "../../lib/factory/InputFieldSelection";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginSchema } from "../../components/validation/ValidationSchema";
 const LoginPage = () => {
   const navigate = useNavigate();
   const { setToken } = useAuthStore();
@@ -25,7 +24,7 @@ const LoginPage = () => {
     formState: { errors },
     reset,
   } = useForm({
-    resolver: zodResolver(loginSchema),
+    resolver: zodResolver(loginFieldsData.loginSchema),
   });
 
   const { mutate, isPending } = useMutation({
@@ -41,16 +40,15 @@ const LoginPage = () => {
       errorToast("Invalid credentials. Please try again.");
     },
   });
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-neutral-700 px-4">
       <AuthFormWrapper title="Login" onSubmit={handleSubmit(submitFormData)}>
-        {LOGIN_INPUT_FIELDS.map((field) => (
-          <FieldFactory
+        {loginFieldsData.inputFields.map((field) => (
+          <InputFieldSelection
             key={field.name}
             field={field}
             register={register}
-            error={errors[field.name]}
+            errorMessage={errors[field.name]?.message}
           />
         ))}
 

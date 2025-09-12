@@ -1,5 +1,5 @@
 import MovieCard from "./MovieCard";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { MOVIES_API } from "../../lib/api";
 import { Loader } from "../../components/ui/Loader";
 import { useInfiniteQuery } from "@tanstack/react-query";
@@ -25,9 +25,9 @@ const MoviesSection = () => {
     queryKey: ["movies", searchText],
     queryFn: async ({ pageParam = 1 }) => {
       const paginationAPI = searchText
-        ? MOVIES_API.searchMovies(searchText, pageParam)
-        : MOVIES_API.getAllMovies(pageParam);
-      const response = await paginationAPI;
+        ? () => MOVIES_API.searchMovies(searchText, pageParam)
+        : () => MOVIES_API.getAllMovies(pageParam);
+      const response = await paginationAPI();
 
       return {
         results: response.data.results,
@@ -44,7 +44,9 @@ const MoviesSection = () => {
     },
   });
 
-  const movies = data?.pages.flatMap((page) => page.results) || [];
+  const movies = useMemo(() => {
+    return data?.pages.flatMap((page) => page.results) || [];
+  },[data]);
 
   return (
     <HeaderFooterWrapper>
