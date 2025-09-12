@@ -7,12 +7,13 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { REACT_QUERY_CONFIG } from "../../lib/constant/queryConfig";
 import { useMovieNavigation } from "../../utils/hooks/useMovieNavigation";
 import HeaderFooterWrapper from "../../components/layout/HeaderFooterWrapper";
+import { useDebounce } from "../../utils/hooks/useDebounce";
 
 const MoviesSection = () => {
   const { handleMovieClick } = useMovieNavigation([]);
   const [searchText, setSearchText] = useState("");
   const handleSearchField = (e) => setSearchText(e.target.value);
-
+  const debouncedSearch = useDebounce(searchText, 500);
   const {
     data,
     error,
@@ -22,10 +23,10 @@ const MoviesSection = () => {
     isError,
     isFetchingNextPage,
   } = useInfiniteQuery({
-    queryKey: ["movies", searchText],
+    queryKey: ["movies", debouncedSearch],
     queryFn: async ({ pageParam = 1 }) => {
-      const paginationAPI = searchText
-        ? () => MOVIES_API.searchMovies(searchText, pageParam)
+      const paginationAPI = debouncedSearch
+        ? () => MOVIES_API.searchMovies(debouncedSearch, pageParam)
         : () => MOVIES_API.getAllMovies(pageParam);
       const response = await paginationAPI();
 
@@ -46,7 +47,7 @@ const MoviesSection = () => {
 
   const movies = useMemo(() => {
     return data?.pages.flatMap((page) => page.results) || [];
-  },[data]);
+  }, [data]);
 
   return (
     <HeaderFooterWrapper>
