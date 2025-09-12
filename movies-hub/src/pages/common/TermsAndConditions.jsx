@@ -1,8 +1,8 @@
-import Wrapper from "../../components/layout/Wrapper";
+import HeaderFooterWrapper from "../../components/layout/HeaderFooterWrapper";
 
 const TermsAndConditions = () => {
   return (
-    <Wrapper>
+    <HeaderFooterWrapper>
       <section className="min-h-screen bg-gray-50 text-gray-800 py-12 px-6">
         <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-2xl p-8">
           <h1 className="text-3xl font-bold text-center mb-6 text-gray-900">
@@ -76,7 +76,7 @@ const TermsAndConditions = () => {
           </div>
         </div>
       </section>
-    </Wrapper>
+    </HeaderFooterWrapper>
   );
 };
 

@@ -1,6 +1,6 @@
 import React from "react";
 import MovieCard from "../movie/MovieCard";
-import Wrapper from "../../components/layout/Wrapper";
+import HeaderFooterWrapper from "../../components/layout/HeaderFooterWrapper";
 import { useMovieNavigation } from "../../utils/hooks/useMovieNavigation";
 import { useFavoritesStore } from "../../lib/store/useFavoritesStore";
 
@@ -9,12 +9,11 @@ const Favorites = () => {
   const favorites = useFavoritesStore((state) => state.favorites);
 
   return (
-    <Wrapper>
+    <HeaderFooterWrapper>
       <div className="min-h-screen bg-gray-700 text-white py-8 px-4">
         <h1 className="text-2xl font-bold mb-6 text-center">
           Favorite Movies ❤️
         </h1>
-
         {favorites.length === 0 ? (
           <p className="text-center text-gray-400">No favorite movies yet.</p>
         ) : (
@@ -29,7 +28,7 @@ const Favorites = () => {
           </div>
         )}
       </div>
-    </Wrapper>
+    </HeaderFooterWrapper>
   );
 };
 

@@ -1,89 +1,111 @@
-import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import Wrapper from "../../components/layout/Wrapper";
 import MovieCard from "./MovieCard";
-import useMovieStore from "../../lib/store/useMovieStore";
-import { Button } from "../../components/ui/Button";
+import React, { useMemo, useState } from "react";
+import { MOVIES_API } from "../../lib/api";
+import { Loader } from "../../components/ui/Loader";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { REACT_QUERY_CONFIG } from "../../lib/constant/queryConfig";
 import { useMovieNavigation } from "../../utils/hooks/useMovieNavigation";
-import { Loader2 } from "lucide-react";
+import HeaderFooterWrapper from "../../components/layout/HeaderFooterWrapper";
+import { useDebounce } from "../../utils/hooks/useDebounce";
 
 const MoviesSection = () => {
-  const {
-    movies,
-    loading,
-    error,
-    page,
-    query,
-    fetchMovies,
-    searchMovies,
-    nextPage,
-    prevPage,
-  } = useMovieStore();
   const { handleMovieClick } = useMovieNavigation([]);
-  const navigate = useNavigate();
+  const [searchText, setSearchText] = useState("");
+  const handleSearchField = (e) => setSearchText(e.target.value);
+  const debouncedSearch = useDebounce(searchText, 500);
+  const {
+    data,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isLoading,
+    isError,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
+    queryKey: ["movies", debouncedSearch],
+    queryFn: async ({ pageParam = 1 }) => {
+      const paginationAPI = debouncedSearch
+        ? () => MOVIES_API.searchMovies(debouncedSearch, pageParam)
+        : () => MOVIES_API.getAllMovies(pageParam);
+      const response = await paginationAPI();
 
-  useEffect(() => {
-    if (movies.length === 0) fetchMovies();
-  }, [movies]);
-  const handleSearchField = (e) => searchMovies(e.target.value);
+      return {
+        results: response.data.results,
+        nextPage: pageParam + 1,
+        totalPages: response.data.total_pages,
+      };
+    },
+    ...REACT_QUERY_CONFIG.DEFAULT,
+    getNextPageParam: (lastPage) => {
+      if (lastPage.nextPage <= lastPage.totalPages) {
+        return lastPage.nextPage;
+      }
+      return undefined;
+    },
+  });
+
+  const movies = useMemo(() => {
+    return data?.pages.flatMap((page) => page.results) || [];
+  }, [data]);
+
   return (
-    <Wrapper>
+    <HeaderFooterWrapper>
       <section className="px-8 py-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
           <h2 className="text-3xl font-bold text-black">
-            {query ? `Results for "${query}"` : "Trending Movies"}
+            {searchText ? `Results for "${searchText}"` : "Trending Movies"}
           </h2>
 
           <input
             type="text"
             placeholder="Search movies..."
-            value={query}
+            value={searchText}
             onChange={handleSearchField}
             className="w-full sm:w-72 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
 
-        {loading ? (
-          <div className="flex gap-2">
-            <span className="text-gray-400">Loading movies...</span>
-            <Loader2 className="animate-spin w-5 h-5 text-gray-600" />
-          </div>
-        ) : (
-          <></>
-        )}
-        {error ? <p className="text-red-500">{error}</p> : <></>}
+        {isLoading ? <Loader loaderMessage="Loading Movies..." /> : <></>}
+        {isError ? <p className="text-red-500">{error.message}</p> : <></>}
 
-        {!loading && movies.length > 0 ? (
-          <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-            {movies.map((movie) => (
-              <MovieCard
-                key={movie.id}
-                movie={movie}
-                onClick={() => handleMovieClick(movie)}
-              />
-            ))}
-          </div>
-        ) : (
-          !loading && <p className="text-gray-400">No movies found.</p>
+        {!isLoading && movies.length > 0 && (
+          <InfiniteScroll
+            dataLength={movies.length}
+            next={fetchNextPage}
+            hasMore={!!hasNextPage}
+            loader={
+              isFetchingNextPage ? (
+                <Loader loaderMessage="Loading more movies..." />
+              ) : null
+            }
+            endMessage={
+              !isFetchingNextPage && !hasNextPage ? (
+                <p className="text-center text-gray-400 mt-4">
+                  You have reached the end 🎬
+                </p>
+              ) : null
+            }
+          >
+            <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+              {movies.map((movie, index) => (
+                <MovieCard
+                  key={`${movie.id}-${index}`}
+                  movie={movie}
+                  onClick={() => handleMovieClick(movie)}
+                />
+              ))}
+            </div>
+          </InfiniteScroll>
         )}
 
-        <div className="flex justify-between items-center mt-8 gap-4">
-          <Button
-            onClick={prevPage}
-            label={"Prev"}
-            disabled={page === 1}
-            variant={page === 1 ? "disabled" : "warning"}
-          />
-          <span className="font-semibold">Page {page}</span>
-          <Button
-            onClick={nextPage}
-            label={"Next"}
-            disabled={page === 500}
-            variant={page === 500 ? "disabled" : "warning"}
-          />
-        </div>
+        {!isLoading && movies.length === 0 && (
+          <p className="text-gray-500 text-center mt-6">
+            No movies found for "{searchText}" 😢
+          </p>
+        )}
       </section>
-    </Wrapper>
+    </HeaderFooterWrapper>
   );
 };
 
