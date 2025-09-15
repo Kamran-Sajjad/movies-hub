@@ -1,4 +1,3 @@
-
 import { z } from "zod";
 
 export const INPUT_FIELD_TYPES = {
@@ -8,7 +7,6 @@ export const INPUT_FIELD_TYPES = {
   CHECKBOX: "checkbox",
   RADIO: "radio",
 };
-
 
 export const loginFieldsData = {
   inputFields: [
@@ -33,7 +31,6 @@ export const loginFieldsData = {
     password: z.string().min(1, "Please enter your password."),
   }),
 };
-
 
 export const signupFieldsData = {
   inputFields: [
@@ -68,6 +65,7 @@ export const signupFieldsData = {
       label: "I agree to terms and conditions",
     },
   ],
+
   signupSchema: z.object({
     name: z.string().min(1, "Please enter your name."),
     email: z
@@ -75,11 +73,16 @@ export const signupFieldsData = {
       .min(1, "Please enter your email.")
       .email("Please enter a valid email."),
     password: z.string().min(1, "Please enter your password."),
-    gender: z.enum(["Male", "Female"], {
-      required_error: "Please select a gender.",
-    }),
-    terms: z.literal(true, {
-      errorMap: () => ({ message: "You must accept terms." }),
-    }),
+
+    gender: z
+      .string()
+      .nullable()
+      .refine((val) => val === "Male" || val === "Female", {
+        message: "Please select a gender.",
+      }),
+
+    terms: z
+      .boolean()
+      .refine((val) => val === true, { message: "You must accept terms." }),
   }),
 };

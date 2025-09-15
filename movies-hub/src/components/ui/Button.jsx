@@ -14,7 +14,8 @@ const variants = {
     "text-gray-700 bg-gray-100 hover:bg-gray-700 hover:text-white focus:ring-gray-100",
   ghost: "text-black hover:scale-115 focus:outline-none ",
   disabled: "bg-gray-600 text-gray-300 cursor-not-allowed",
-  underline: "mt-3 text-sm text-red-400 hover:underline focus:outline-none",
+  underline: "text-sm text-red-400 hover:underline focus:outline-none",
+  navigation: "text-sm text-white hover:underline hover:text-blue-400 focus:outline-none",
   invisible: "",
 };
 

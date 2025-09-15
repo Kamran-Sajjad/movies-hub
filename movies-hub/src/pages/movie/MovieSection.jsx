@@ -1,5 +1,5 @@
 import MovieCard from "./MovieCard";
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import { MOVIES_API } from "../../lib/api";
 import { Loader } from "../../components/ui/Loader";
 import { useInfiniteQuery } from "@tanstack/react-query";
@@ -8,12 +8,25 @@ import { REACT_QUERY_CONFIG } from "../../lib/constant/queryConfig";
 import { useMovieNavigation } from "../../utils/hooks/useMovieNavigation";
 import HeaderFooterWrapper from "../../components/layout/HeaderFooterWrapper";
 import { useDebounce } from "../../utils/hooks/useDebounce";
+import { useSearchParams } from "react-router-dom";
 
 const MoviesSection = () => {
-  const { handleMovieClick } = useMovieNavigation([]);
-  const [searchText, setSearchText] = useState("");
-  const handleSearchField = (e) => setSearchText(e.target.value);
-  const debouncedSearch = useDebounce(searchText, 500);
+  const { handleMovieClick } = useMovieNavigation();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const searchText = searchParams.get("title") || "";
+  const debouncedSearch = useDebounce(searchText, 1000);
+
+  const handleSearchField = (e) => {
+    const searchValue = e.target.value.trim();
+
+    if (searchValue) {
+      setSearchParams({ title: searchValue });
+    } else {
+      setSearchParams({});
+    }
+  };
+
   const {
     data,
     error,
@@ -28,6 +41,7 @@ const MoviesSection = () => {
       const paginationAPI = debouncedSearch
         ? () => MOVIES_API.searchMovies(debouncedSearch, pageParam)
         : () => MOVIES_API.getAllMovies(pageParam);
+
       const response = await paginationAPI();
 
       return {
@@ -66,8 +80,8 @@ const MoviesSection = () => {
           />
         </div>
 
-        {isLoading ? <Loader loaderMessage="Loading Movies..." /> : <></>}
-        {isError ? <p className="text-red-500">{error.message}</p> : <></>}
+        {isLoading ? <Loader loaderMessage="Loading Movies..." /> : null}
+        {isError ? <p className="text-red-500">{error.message}</p> : null}
 
         {!isLoading && movies.length > 0 && (
           <InfiniteScroll

@@ -10,40 +10,31 @@ import { Button } from "../../components/ui/Button";
 import { AuthFormWrapper } from "../../components/layout/AuthFormWrapper";
 import { useAuthStore } from "../../lib/store/useAuthStore";
 import { API_TOKEN } from "../../lib/constant/constants";
-import { loginFieldsData } from "../../utils/data/FieldData";
+import { signupFieldsData } from "../../utils/data/FieldData";
 import { InputFieldSelection } from "../../lib/factory/InputFieldSelection";
 import { zodResolver } from "@hookform/resolvers/zod";
-const LoginPage = () => {
+const SignupPage = () => {
   const navigate = useNavigate();
   const { setToken } = useAuthStore();
 
-  const submitFormData = (payload) => mutate(payload);
+  const submitFormData = (payload) => {
+    console.log(payload);
+    reset();
+    successToast("Signup Sucessfully");
+  };
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
   } = useForm({
-    resolver: zodResolver(loginFieldsData.loginSchema),
+    resolver: zodResolver(signupFieldsData.signupSchema),
   });
 
-  const { mutate, isPending } = useMutation({
-    mutationFn: (payload) => AUTH_API.login(payload),
-    onSuccess: () => {
-      successToast("Login successful!");
-      reset();
-      setToken(API_TOKEN);
-      navigate(ROUTES.MOVIES);
-    },
-    onError: (error) => {
-      console.error("Login failed:", error);
-      errorToast("Invalid credentials. Please try again.");
-    },
-  });
   return (
     <div className="min-h-screen flex items-center justify-center bg-neutral-700 px-4">
-      <AuthFormWrapper title="Login" onSubmit={handleSubmit(submitFormData)}>
-        {loginFieldsData.inputFields.map((field) => (
+      <AuthFormWrapper title="Signup" onSubmit={handleSubmit(submitFormData)}>
+        {signupFieldsData.inputFields.map((field) => (
           <InputFieldSelection
             key={field.name}
             field={field}
@@ -52,23 +43,16 @@ const LoginPage = () => {
           />
         ))}
 
-        <Button
-          type="submit"
-          content="Login"
-          variant="danger"
-          isLoading={isPending}
-        />
+        <Button type="submit" content="Login" variant="danger" />
         <Button
           type="button"
-          content="Forget Password"
-          variant="underline"
-          onClick={() =>
-            alert("Forgot password functionality not implemented yet.")
-          }
+          content="Already have an account ? Login"
+          variant="navigation"
+          onClick={() => navigate(ROUTES.LOGIN)}
         />
       </AuthFormWrapper>
     </div>
   );
 };
 
-export default LoginPage;
+export default SignupPage;
