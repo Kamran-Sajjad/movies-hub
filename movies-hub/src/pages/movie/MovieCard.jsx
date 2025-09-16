@@ -1,29 +1,30 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React from "react";
 import { Heart } from "lucide-react";
 import { useFavorites } from "../../utils/hooks/useFavorites";
+import { Button } from "../../components/ui/Button";
 
 const MovieCard = ({ movie, onClick }) => {
-  const navigate = useNavigate();
   const { isFavorite, toggleFavorite } = useFavorites(movie);
-
+  const handleClick = (e) => {
+    e.stopPropagation();
+    toggleFavorite();
+  };
   return (
     <div
       className="bg-gray-800 rounded-xl shadow-md overflow-hidden hover:scale-105 transform transition duration-300 cursor-pointer relative"
       onClick={() => onClick(movie)}
     >
-      <button
-        onClick={(e) => {
-          e.stopPropagation();
-          toggleFavorite();
-        }}
-        className="absolute top-3 right-3 text-white hover:scale-110 transition-transform"
-      >
-        <Heart
-          size={22}
-          className={isFavorite ? "fill-red-600 text-red-600" : "text-white"}
-        />
-      </button>
+      <Button
+        onClick={handleClick}
+        className="!p-2 !rounded-full absolute top-3 right-3 w-9 h-9 flex items-center justify-center"
+        variant="ghost"
+        content={
+          <Heart
+            size={20}
+            className={isFavorite ? "fill-red-600 text-red-600" : "text-white"}
+          />
+        }
+      />
 
       <img
         src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
