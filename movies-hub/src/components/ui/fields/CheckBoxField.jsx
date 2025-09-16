@@ -1,6 +1,7 @@
 import React from "react";
+import { FormErrorMessages } from "./FormErrorMessages";
 
-export const CheckboxField = ({field, register, errorMessage }) => {
+export const CheckboxField = ({ field, register, errorMessage }) => {
   return (
     <>
       <div className="flex items-center space-x-2">
@@ -16,9 +17,7 @@ export const CheckboxField = ({field, register, errorMessage }) => {
       </div>
 
       <div className="mb-3 min-h-[25px]">
-        {errorMessage && (
-          <p className="text-red-500 text-sm  ">{errorMessage}</p>
-        )}
+        <FormErrorMessages errorMessage={errorMessage} />
       </div>
     </>
   );

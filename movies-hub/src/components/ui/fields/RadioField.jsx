@@ -1,10 +1,7 @@
 import React from "react";
+import { FormErrorMessages } from "./FormErrorMessages";
 
-export const RadioField = ({
-  field,
-  register,
-  errorMessage,
-}) => {
+export const RadioField = ({ field, register, errorMessage }) => {
   return (
     <div className="mb-3">
       <div className="flex space-x-4">
@@ -24,7 +21,7 @@ export const RadioField = ({
         ))}
       </div>
       <div className="min-h-[20px]">
-        {errorMessage ? <p className="text-red-500 text-sm">{errorMessage}</p>:<></>}
+        <FormErrorMessages errorMessage={errorMessage} />
       </div>
     </div>
   );

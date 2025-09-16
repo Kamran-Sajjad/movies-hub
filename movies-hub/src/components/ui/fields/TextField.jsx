@@ -1,5 +1,5 @@
-
 import React from "react";
+import { FormErrorMessages } from "./FormErrorMessages";
 
 export const TextField = ({ field, register, errorMessage }) => {
   return (
@@ -13,11 +13,7 @@ export const TextField = ({ field, register, errorMessage }) => {
           focus:outline-none focus:ring-2 focus:ring-white w-full"
       />
       <div className="min-h-[20px]">
-        {errorMessage ? (
-          <p className="text-red-500 text-sm">{errorMessage}</p>
-        ) : (
-          <></>
-        )}
+        <FormErrorMessages errorMessage={errorMessage} />
       </div>
     </div>
   );

@@ -1,13 +1,13 @@
 import { useNavigate } from "react-router-dom";
-import { ROUTES_WITH_PARAMS} from "../../routes/routeConstants";
+import { ROUTES_WITH_PARAMS } from "../../routes/routeConstants";
 
 export const useMovieNavigation = () => {
   const navigate = useNavigate();
 
   const handleMovieClick = (movie) => {
-    let path = ROUTES_WITH_PARAMS.MOVIE_ID( movie.id);
+    let movieDetailRoute = ROUTES_WITH_PARAMS.MOVIE_DETAIL(movie.id);
 
-    navigate(path);
+    navigate(movieDetailRoute);
   };
 
   return { handleMovieClick };

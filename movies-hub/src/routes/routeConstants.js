@@ -11,19 +11,19 @@ export const ROUTES = {
   LOGIN: "/login",
   SIGNUP: "/signup",
   MOVIES: "/movies",
-  MOVIE_ID: "/movie/:id",
+  MOVIE_DETAIL: "/movie/:id",
   ERROR: "/error404",
   FAVORITE: "/favorites",
   TERMS: "/terms",
 };
 
 export const ROUTES_WITH_PARAMS = {
-  MOVIE_ID: (id) => `/movie/${id}`,
+  MOVIE_DETAIL: (id) => `/movie/${id}`,
 };
 
 export const protectedRoutes = [
   { path: ROUTES.MOVIES, element: MovieSection },
-  { path: ROUTES.MOVIE_ID, element: MovieDetail },
+  { path: ROUTES.MOVIE_DETAIL, element: MovieDetail },
   { path: ROUTES.FAVORITE, element: Favorites },
 ];
 

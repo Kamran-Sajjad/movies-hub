@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { Button } from "../Button";
+import { FormErrorMessages } from "./FormErrorMessages";
 
-export const PasswordField = ({field,  register, errorMessage }) => {
+export const PasswordField = ({ field, register, errorMessage }) => {
   const [showPassword, setShowPassword] = useState(false);
   const inputType = showPassword ? "text" : "password";
 
@@ -24,11 +25,7 @@ export const PasswordField = ({field,  register, errorMessage }) => {
         content={showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
       />
       <div className="min-h-[20px]">
-        {errorMessage ? (
-          <p className="text-red-500 text-sm">{errorMessage}</p>
-        ) : (
-          <></>
-        )}
+        <FormErrorMessages errorMessage={errorMessage} />
       </div>
     </div>
   );

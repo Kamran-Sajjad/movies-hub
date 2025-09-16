@@ -16,22 +16,24 @@ const MoviesSection = () => {
   const searchText = searchParams.get("search") || "";
   const [searchState, setSearchState] = useState(searchText);
 
-  const debouncedSearch = useCallback(
-    debounce((value) => {
+  const setSearchStates = (value) => {
+    if (value) {
       setSearchState(value);
-      if (value) {
-        setSearchParams({ search: value });
-      } else {
-        setSearchState("");
-        setSearchParams({});
-      }
-    }, 1000),
+      setSearchParams({ search: value });
+    } else {
+      setSearchState("");
+      setSearchParams({});
+    }
+  };
+
+  const debouncedSearch = useCallback(
+    debounce((value) => setSearchStates(value), 1000),
     [setSearchParams]
   );
 
   const handleSearchField = (e) => {
-    const searchValue = e.target.value;
-    debouncedSearch(searchValue);
+    const value = e.target.value;
+    debouncedSearch(value);
   };
 
   const {
@@ -45,9 +47,13 @@ const MoviesSection = () => {
   } = useInfiniteQuery({
     queryKey: ["movies", searchState],
     queryFn: async ({ pageParam = 1 }) => {
+      const params = {
+        page: pageParam,
+        ...(searchState && { query: searchState }),
+      };
       const paginationApi = searchState
-        ? () => MOVIES_API.searchMovies(searchState, pageParam)
-        : () => MOVIES_API.getAllMovies(pageParam);
+        ? () => MOVIES_API.searchMovies(params)
+        : () => MOVIES_API.getAllMovies(params);
 
       const response = await paginationApi();
 
