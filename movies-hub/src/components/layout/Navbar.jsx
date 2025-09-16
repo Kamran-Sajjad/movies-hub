@@ -8,6 +8,7 @@ const Navbar = () => {
   const [showMenu, setShowMenu] = React.useState(false);
   const navigate = useNavigate();
   const logout = useAuthStore((state) => state.logout);
+
   const handleHomeButtonClick = () => navigate(ROUTES.MOVIES);
   const handleFavoritesButtonClick = () => navigate(ROUTES.FAVORITE);
   const handleProfileButtonClick = () => {};
@@ -29,13 +30,13 @@ const Navbar = () => {
 
       <div className="flex items-center gap-3 relative">
         <Button
-          label="Home"
+          content="Home"
           onClick={handleHomeButtonClick}
           variant="secondary"
           isLoading={false}
         />
         <Button
-          label="Favorites"
+          content="Favorites"
           onClick={handleFavoritesButtonClick}
           variant="secondary"
           isLoading={false}
@@ -52,12 +53,12 @@ const Navbar = () => {
           {showMenu && (
             <div className="absolute right-0 mt-2 w-36 bg-gray-700 rounded-lg shadow-lg p-2 z-20">
               <Button
-                label="Profile"
+                content="Profile"
                 onClick={handleProfileButtonClick}
                 variant="secondary"
               />
               <Button
-                label="Logout"
+                content="Logout"
                 onClick={handleLogoutButtonClick}
                 variant="danger"
               />
