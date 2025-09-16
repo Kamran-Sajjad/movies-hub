@@ -14,8 +14,8 @@ export const MOVIES_API = {
         include_adult: false,
         include_video: false,
         language: "en-US",
-        ...params,
         sort_by: "popularity.desc",
+        ...params,
       },
     });
   },

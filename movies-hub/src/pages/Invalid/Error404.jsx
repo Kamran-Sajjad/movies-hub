@@ -15,7 +15,7 @@ const Error404 = () => {
         Oops! The page you’re looking for doesn’t exist or has been moved.
       </p>
       <Button
-        label={"Go Back Home"}
+        content={"Go Back Home"}
         variant="warning"
         onClick={() => navigate(ROUTES.MOVIES)}
       />
