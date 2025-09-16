@@ -19,11 +19,10 @@ const inputFieldSelector = (type) => {
 };
 
 export const InputFieldSelection = ({ field, register, errorMessage }) => {
-  const { inputFieldType, ...props } = field;
-  const SelectedInputField = inputFieldSelector(inputFieldType);
+  const SelectedInputField = inputFieldSelector(field.inputFieldType);
   return (
     <SelectedInputField
-      {...props}
+      field={field}
       register={register}
       errorMessage={errorMessage}
     />

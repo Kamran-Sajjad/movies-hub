@@ -17,7 +17,6 @@ const MovieDetail = () => {
       const response = await MOVIES_API.getMovieById(id);
       return response.data;
     },
-    ...REACT_QUERY_CONFIG.DEFAULT,
   });
 
   const { isFavorite, toggleFavorite } = useFavorites(movieDetail);

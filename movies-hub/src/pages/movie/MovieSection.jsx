@@ -1,30 +1,37 @@
 import MovieCard from "./MovieCard";
-import React, { useMemo } from "react";
+import React, { useMemo, useCallback, useState } from "react";
 import { MOVIES_API } from "../../lib/api";
 import { Loader } from "../../components/ui/Loader";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { REACT_QUERY_CONFIG } from "../../lib/constant/queryConfig";
 import { useMovieNavigation } from "../../utils/hooks/useMovieNavigation";
 import HeaderFooterWrapper from "../../components/layout/HeaderFooterWrapper";
-import { useDebounce } from "../../utils/hooks/useDebounce";
 import { useSearchParams } from "react-router-dom";
+import debounce from "lodash/debounce";
 
 const MoviesSection = () => {
   const { handleMovieClick } = useMovieNavigation();
-  const [searchParams, setSearchParams] = useSearchParams();
 
-  const searchText = searchParams.get("title") || "";
-  const debouncedSearch = useDebounce(searchText, 1000);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const searchText = searchParams.get("search") || "";
+  const [searchState, setSearchState] = useState(searchText);
+
+  const debouncedSearch = useCallback(
+    debounce((value) => {
+      setSearchState(value);
+      if (value) {
+        setSearchParams({ search: value });
+      } else {
+        setSearchState("");
+        setSearchParams({});
+      }
+    }, 1000),
+    [setSearchParams]
+  );
 
   const handleSearchField = (e) => {
-    const searchValue = e.target.value.trim();
-
-    if (searchValue) {
-      setSearchParams({ title: searchValue });
-    } else {
-      setSearchParams({});
-    }
+    const searchValue = e.target.value;
+    debouncedSearch(searchValue);
   };
 
   const {
@@ -36,13 +43,13 @@ const MoviesSection = () => {
     isError,
     isFetchingNextPage,
   } = useInfiniteQuery({
-    queryKey: ["movies", debouncedSearch],
+    queryKey: ["movies", searchState],
     queryFn: async ({ pageParam = 1 }) => {
-      const paginationAPI = debouncedSearch
-        ? () => MOVIES_API.searchMovies(debouncedSearch, pageParam)
+      const paginationApi = searchState
+        ? () => MOVIES_API.searchMovies(searchState, pageParam)
         : () => MOVIES_API.getAllMovies(pageParam);
 
-      const response = await paginationAPI();
+      const response = await paginationApi();
 
       return {
         results: response.data.results,
@@ -50,12 +57,9 @@ const MoviesSection = () => {
         totalPages: response.data.total_pages,
       };
     },
-    ...REACT_QUERY_CONFIG.DEFAULT,
     getNextPageParam: (lastPage) => {
-      if (lastPage.nextPage <= lastPage.totalPages) {
-        return lastPage.nextPage;
-      }
-      return undefined;
+      if (lastPage.nextPage > lastPage.totalPages) return undefined;
+      return lastPage.nextPage;
     },
   });
 
@@ -68,13 +72,13 @@ const MoviesSection = () => {
       <section className="px-8 py-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
           <h2 className="text-3xl font-bold text-black">
-            {searchText ? `Results for "${searchText}"` : "Trending Movies"}
+            {searchState ? `Results for "${searchState}"` : "Trending Movies"}
           </h2>
 
           <input
             type="text"
             placeholder="Search movies..."
-            value={searchText}
+            defaultValue={searchState}
             onChange={handleSearchField}
             className="w-full sm:w-72 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />

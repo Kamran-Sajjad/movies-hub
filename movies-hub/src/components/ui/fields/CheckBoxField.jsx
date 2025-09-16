@@ -1,17 +1,17 @@
 import React from "react";
 
-export const CheckboxField = ({ name, label, register, errorMessage }) => {
+export const CheckboxField = ({field, register, errorMessage }) => {
   return (
     <>
       <div className="flex items-center space-x-2">
         <input
-          id={name}
+          id={field.name}
           type="checkbox"
-          {...register(name)}
+          {...register(field.name)}
           className="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500"
         />
-        <label htmlFor={name} className="text-white text-sm">
-          {label}
+        <label htmlFor={field.name} className="text-white text-sm">
+          {field.label}
         </label>
       </div>
 

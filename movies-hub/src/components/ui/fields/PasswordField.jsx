@@ -2,24 +2,19 @@ import React, { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { Button } from "../Button";
 
-export const PasswordField = ({
-  name,
-  placeholder,
-  register,
-  errorMessage,
-}) => {
+export const PasswordField = ({field,  register, errorMessage }) => {
   const [showPassword, setShowPassword] = useState(false);
   const inputType = showPassword ? "text" : "password";
 
   return (
     <div className="relative mb-3">
       <input
-        id={name}
+        id={field.name}
         type={inputType}
-        placeholder={placeholder}
-        {...register(name)}
+        placeholder={field.placeholder}
+        {...register(field.name)}
         className="px-3 py-2 rounded bg-neutral-700 border border-neutral-600 text-white 
-          focus:outline-none focus:ring-2 focus:ring-red-600 w-full pr-10"
+          focus:outline-none focus:ring-2 focus:ring-white w-full pr-10"
       />
       <Button
         type="button"

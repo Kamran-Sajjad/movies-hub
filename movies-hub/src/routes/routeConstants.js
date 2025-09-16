@@ -11,10 +11,14 @@ export const ROUTES = {
   LOGIN: "/login",
   SIGNUP: "/signup",
   MOVIES: "/movies",
-  MOVIE_ID: "/movie/:id/:title",
+  MOVIE_ID: "/movie/:id",
   ERROR: "/error404",
   FAVORITE: "/favorites",
   TERMS: "/terms",
+};
+
+export const ROUTES_WITH_PARAMS = {
+  MOVIE_ID: (id) => `/movie/${id}`,
 };
 
 export const protectedRoutes = [
